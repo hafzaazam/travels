@@ -98,23 +98,23 @@ export function Stats() {
         <div className="relative group">
           <div className="absolute -inset-1 rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-brand opacity-15 blur-2xl transition duration-1000 group-hover:opacity-25 group-hover:duration-200" />
 
-          <div className="relative grid grid-cols-2 md:flex md:flex-row items-stretch md:items-center justify-between glass rounded-2xl sm:rounded-[2rem] px-3 py-4 sm:px-8 sm:py-10 md:py-12 gap-2 sm:gap-8 md:gap-4 overflow-hidden shadow-glow">
+          <div className="relative grid grid-cols-2 md:flex md:flex-row items-stretch md:items-center justify-between glass rounded-2xl sm:rounded-3xl lg:rounded-[2rem] px-3 py-4 sm:px-6 sm:py-6 md:px-6 md:py-6 lg:px-8 lg:py-10 gap-2 sm:gap-4 md:gap-2 lg:gap-4 overflow-hidden shadow-glow">
             {ITEMS.map((it, idx) => (
               <div key={it.label} className="contents md:flex md:flex-1 md:items-center">
-                <div className="flex-1 flex flex-col items-center text-center px-1 sm:px-4 transition-transform duration-300 hover:-translate-y-1 cursor-default">
-                  <div className="mb-2 sm:mb-4 p-1.5 sm:p-3 rounded-lg sm:rounded-2xl bg-primary/10 text-primary">
-                    <it.Icon className="w-4 h-4 sm:w-6 sm:h-6" />
+                <div className="flex-1 flex flex-col items-center text-center px-1 sm:px-2 lg:px-4 transition-transform duration-300 hover:-translate-y-1 cursor-default">
+                  <div className="mb-2 sm:mb-3 lg:mb-4 p-1.5 sm:p-2 lg:p-3 rounded-lg sm:rounded-xl lg:rounded-2xl bg-primary/10 text-primary">
+                    <it.Icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
                   </div>
-                  <div className="font-display text-xl sm:text-4xl font-bold tracking-tight text-gradient-brand">
+                  <div className="font-display text-xl sm:text-2xl lg:text-4xl font-bold tracking-tight text-gradient-brand">
                     <Counter to={it.value} suffix={it.suffix} />
                   </div>
-                  <p className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase tracking-wider sm:tracking-widest mt-0.5 sm:mt-1 leading-tight">
+                  <p className="text-[10px] sm:text-[11px] lg:text-xs font-medium text-muted-foreground uppercase tracking-wider lg:tracking-widest mt-0.5 sm:mt-1 leading-tight">
                     {it.label}
                   </p>
-                  <div className="hidden sm:block"><MicroChart kind={it.chart} /></div>
+                  <div className="hidden lg:block"><MicroChart kind={it.chart} /></div>
                 </div>
                 {idx < ITEMS.length - 1 && (
-                  <div className="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-border to-transparent" />
+                  <div className="hidden md:block w-px h-10 lg:h-16 bg-gradient-to-b from-transparent via-border to-transparent" />
                 )}
               </div>
             ))}
