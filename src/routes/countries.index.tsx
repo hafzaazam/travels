@@ -105,6 +105,10 @@ function CountriesIndex() {
             </div>
           </div>
         </section>
+        <RelatedLinks
+          keys={["services", "compare", "book", "blog", "about", "contact"]}
+          title="Related resources"
+        />
       </main>
       <Footer />
       <BackToTop />
