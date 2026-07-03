@@ -1,7 +1,9 @@
 // Supabase Edge Function: ai-chat
-// Deploy from your machine:
+// Proxies chat requests to Google's Generative Language API (Gemini).
+//
+// Deploy:
 //   supabase functions deploy ai-chat --no-verify-jwt
-//   supabase secrets set LOVABLE_API_KEY=your-key-here
+//   supabase secrets set GOOGLE_API_KEY=your-google-ai-studio-key
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -9,31 +11,54 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      return json({ error: "LOVABLE_API_KEY not configured" }, 500);
+    const GOOGLE_API_KEY = Deno.env.get("GOOGLE_API_KEY");
+    if (!GOOGLE_API_KEY) {
+      return json({ error: "GOOGLE_API_KEY not configured" }, 500);
     }
 
-    const { messages, model = "google/gemini-3-flash-preview", stream = false } =
-      await req.json();
+    const {
+      messages,
+      model = "gemini-2.5-flash",
+      stream = false,
+    }: { messages: ChatMessage[]; model?: string; stream?: boolean } = await req.json();
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return json({ error: "messages[] required" }, 400);
     }
 
-    const upstream = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    // Convert OpenAI-style messages to Gemini format.
+    const systemText = messages
+      .filter((m) => m.role === "system")
+      .map((m) => m.content)
+      .join("\n\n");
+
+    const contents = messages
+      .filter((m) => m.role !== "system")
+      .map((m) => ({
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [{ text: m.content }],
+      }));
+
+    const endpoint = stream ? "streamGenerateContent" : "generateContent";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+      model,
+    )}:${endpoint}?key=${GOOGLE_API_KEY}${stream ? "&alt=sse" : ""}`;
+
+    const upstream = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-      },
-      body: JSON.stringify({ model, messages, stream }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents,
+        ...(systemText ? { systemInstruction: { parts: [{ text: systemText }] } } : {}),
+      }),
     });
 
     if (!upstream.ok) {
@@ -41,10 +66,7 @@ Deno.serve(async (req) => {
       if (upstream.status === 429) {
         return json({ error: "Rate limit exceeded. Please try again shortly." }, 429);
       }
-      if (upstream.status === 402) {
-        return json({ error: "AI credits exhausted. Please add credits to your workspace." }, 402);
-      }
-      return json({ error: `AI gateway error: ${text}` }, upstream.status);
+      return json({ error: `Google AI error: ${text}` }, upstream.status);
     }
 
     if (stream) {
@@ -59,7 +81,10 @@ Deno.serve(async (req) => {
     }
 
     const data = await upstream.json();
-    return json(data, 200);
+    const text =
+      data?.candidates?.[0]?.content?.parts?.map((p: { text?: string }) => p.text ?? "").join("") ?? "";
+
+    return json({ text, raw: data }, 200);
   } catch (err) {
     console.error("ai-chat error", err);
     return json({ error: (err as Error).message }, 500);
