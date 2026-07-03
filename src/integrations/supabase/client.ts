@@ -1,10 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Public (publishable) credentials — safe to expose in the browser.
-const SUPABASE_URL = "https://utqkhttzsyezrwumoplk.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_u1f8QAZRqz_rdtV7mAYLyw_QO_hZlJ7";
+const SUPABASE_URL = import.meta.env.VITE_APP_SUPABASE_URL as string;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_APP_SUPABASE_ANON_KEY as string;
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  throw new Error(
+    "Missing VITE_APP_SUPABASE_URL or VITE_APP_SUPABASE_ANON_KEY. Set them in .env."
+  );
+}
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
