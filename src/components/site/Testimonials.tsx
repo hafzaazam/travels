@@ -35,14 +35,14 @@ export function Testimonials() {
   }, []);
 
   useEffect(() => {
-    supabase
+    (supabase as any)
       .from("reviews")
       .select("id,name,country,rating,comment")
       .eq("approved", true)
       .order("created_at", { ascending: false })
       .limit(20)
-      .then(({ data }) => {
-        if (data && data.length > 0) setReviews(data as Review[]);
+      .then(({ data }: { data: Review[] | null }) => {
+        if (data && data.length > 0) setReviews(data);
       });
   }, []);
 

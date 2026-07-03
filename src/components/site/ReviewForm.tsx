@@ -31,7 +31,7 @@ export function ReviewForm() {
       return;
     }
     setLoading(true);
-    const { error } = await supabase.from("reviews").insert({
+    const { error } = await (supabase as any).from("reviews").insert({
       name: parsed.data.name,
       country: parsed.data.country || null,
       rating: parsed.data.rating,

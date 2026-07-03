@@ -49,7 +49,7 @@ function AdminPage() {
         setIsAdmin(false);
         return;
       }
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("user_roles")
         .select("role")
         .eq("user_id", u.user.id)
@@ -169,9 +169,9 @@ function DashboardPanel({ onNavigate, userEmail }: { onNavigate: (t: Tab) => voi
   const load = useCallback(async () => {
     setLoading(true);
     const [contacts, reviews, subs] = await Promise.all([
-      supabase.from("contact_submissions").select("status", { count: "exact" }),
-      supabase.from("reviews").select("approved", { count: "exact" }),
-      supabase.from("newsletter_subscribers").select("unsubscribed", { count: "exact" }),
+      (supabase as any).from("contact_submissions").select("status", { count: "exact" }),
+      (supabase as any).from("reviews").select("approved", { count: "exact" }),
+      (supabase as any).from("newsletter_subscribers").select("unsubscribed", { count: "exact" }),
     ]);
     setStats({
       contacts: contacts.count ?? 0,
@@ -274,7 +274,7 @@ function ContactsPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("contact_submissions")
       .select("id,name,email,phone,subject,message,status,created_at")
       .order("created_at", { ascending: false });
@@ -286,13 +286,13 @@ function ContactsPanel() {
   useEffect(() => { load(); }, [load]);
 
   const updateStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("contact_submissions").update({ status }).eq("id", id);
+    const { error } = await (supabase as any).from("contact_submissions").update({ status }).eq("id", id);
     if (error) return toast.error("Could not update");
     setItems((p) => p.map((c) => (c.id === id ? { ...c, status } : c)));
   };
   const remove = async (id: string) => {
     if (!confirm("Delete this submission?")) return;
-    const { error } = await supabase.from("contact_submissions").delete().eq("id", id);
+    const { error } = await (supabase as any).from("contact_submissions").delete().eq("id", id);
     if (error) return toast.error("Could not delete");
     setItems((p) => p.filter((c) => c.id !== id));
     toast.success("Deleted");
@@ -374,7 +374,7 @@ function ReviewsPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("reviews")
       .select("*")
       .order("created_at", { ascending: false });
@@ -386,14 +386,14 @@ function ReviewsPanel() {
   useEffect(() => { load(); }, [load]);
 
   const setApproved = async (id: string, approved: boolean) => {
-    const { error } = await supabase.from("reviews").update({ approved }).eq("id", id);
+    const { error } = await (supabase as any).from("reviews").update({ approved }).eq("id", id);
     if (error) return toast.error("Could not update");
     setItems((p) => p.map((r) => (r.id === id ? { ...r, approved } : r)));
     toast.success(approved ? "Review approved" : "Review hidden");
   };
   const remove = async (id: string) => {
     if (!confirm("Delete this review?")) return;
-    const { error } = await supabase.from("reviews").delete().eq("id", id);
+    const { error } = await (supabase as any).from("reviews").delete().eq("id", id);
     if (error) return toast.error("Could not delete");
     setItems((p) => p.filter((r) => r.id !== id));
     toast.success("Deleted");
@@ -475,7 +475,7 @@ function SubscribersPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("newsletter_subscribers")
       .select("*")
       .order("created_at", { ascending: false });
@@ -488,7 +488,7 @@ function SubscribersPanel() {
 
   const remove = async (id: string) => {
     if (!confirm("Delete this subscriber?")) return;
-    const { error } = await supabase.from("newsletter_subscribers").delete().eq("id", id);
+    const { error } = await (supabase as any).from("newsletter_subscribers").delete().eq("id", id);
     if (error) return toast.error("Could not delete");
     setItems((p) => p.filter((s) => s.id !== id));
     toast.success("Deleted");
@@ -625,7 +625,7 @@ function SiteInfoPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("contact_info")
       .select("address,map_query,email,phone_display,phone_e164,whatsapp_e164,hours")
       .maybeSingle();
@@ -639,7 +639,7 @@ function SiteInfoPanel() {
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("contact_info")
       .upsert({ id: true, ...form });
     setSaving(false);
@@ -740,7 +740,7 @@ function PopupsPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("site_popups")
       .select("*")
       .order("priority", { ascending: false })
@@ -754,14 +754,14 @@ function PopupsPanel() {
 
   const remove = async (id: string) => {
     if (!confirm("Delete this popup?")) return;
-    const { error } = await supabase.from("site_popups").delete().eq("id", id);
+    const { error } = await (supabase as any).from("site_popups").delete().eq("id", id);
     if (error) return toast.error("Delete failed");
     toast.success("Popup deleted");
     load();
   };
 
   const toggleActive = async (p: Popup) => {
-    const { error } = await supabase.from("site_popups").update({ active: !p.active }).eq("id", p.id);
+    const { error } = await (supabase as any).from("site_popups").update({ active: !p.active }).eq("id", p.id);
     if (error) return toast.error("Update failed");
     load();
   };
@@ -866,8 +866,8 @@ function PopupEditor({ initial, onClose, onSaved }: { initial?: Popup; onClose: 
       priority: Number(form.priority) || 0,
     };
     const { error } = initial
-      ? await supabase.from("site_popups").update(payload).eq("id", initial.id)
-      : await supabase.from("site_popups").insert(payload);
+      ? await (supabase as any).from("site_popups").update(payload).eq("id", initial.id)
+      : await (supabase as any).from("site_popups").insert(payload);
     setSaving(false);
     if (error) return toast.error(error.message || "Save failed");
     toast.success(initial ? "Popup updated" : "Popup created");

@@ -21,7 +21,7 @@ export function Footer() {
       return;
     }
     setLoading(true);
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("newsletter_subscribers")
       .insert({ email: parsed.data.toLowerCase() });
     setLoading(false);

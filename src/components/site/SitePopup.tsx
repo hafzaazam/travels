@@ -49,7 +49,7 @@ export function SitePopup() {
     let mounted = true;
     (async () => {
       const nowIso = new Date().toISOString();
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from("site_popups")
         .select("id,title,body,image_url,cta_label,cta_url,placement,frequency,dismissible")
         .eq("active", true)
@@ -59,7 +59,7 @@ export function SitePopup() {
         .order("created_at", { ascending: false })
         .limit(5);
       if (!mounted || !data?.length) return;
-      const next = data.find((p) => !alreadySeen(p as Popup)) as Popup | undefined;
+      const next = data.find((p: Popup) => !alreadySeen(p)) as Popup | undefined;
       if (!next) return;
       setPopup(next);
       const t = setTimeout(() => mounted && setOpen(true), 1200);

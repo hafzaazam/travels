@@ -36,7 +36,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          const { data } = await supabaseAdmin
+          const { data } = await (supabaseAdmin as any)
             .from("blog_posts")
             .select("slug, updated_at, published_at, noindex, published")
             .eq("published", true)
