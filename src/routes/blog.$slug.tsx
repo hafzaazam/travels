@@ -29,7 +29,7 @@ type Post = {
 const SITE = "https://travellinks.uk";
 
 async function fetchPost(slug: string): Promise<Post | null> {
-  const { data } = await supabase
+  const { data } = await (supabase as any)
     .from("blog_posts")
     .select("*")
     .eq("slug", slug)
@@ -127,7 +127,7 @@ function PostPage() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from("blog_posts")
         .select("id, slug, title, excerpt, content, cover_image, author, tags, published_at, created_at")
         .eq("published", true)

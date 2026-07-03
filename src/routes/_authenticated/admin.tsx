@@ -49,7 +49,7 @@ function AdminPage() {
         setIsAdmin(false);
         return;
       }
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("user_roles")
         .select("role")
         .eq("user_id", u.user.id)
@@ -274,7 +274,7 @@ function ContactsPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("contact_submissions")
       .select("id,name,email,phone,subject,message,status,created_at")
       .order("created_at", { ascending: false });
@@ -374,7 +374,7 @@ function ReviewsPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("reviews")
       .select("*")
       .order("created_at", { ascending: false });
@@ -475,7 +475,7 @@ function SubscribersPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("newsletter_subscribers")
       .select("*")
       .order("created_at", { ascending: false });
@@ -625,7 +625,7 @@ function SiteInfoPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("contact_info")
       .select("address,map_query,email,phone_display,phone_e164,whatsapp_e164,hours")
       .maybeSingle();
@@ -639,7 +639,7 @@ function SiteInfoPanel() {
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("contact_info")
       .upsert({ id: true, ...form });
     setSaving(false);
@@ -740,7 +740,7 @@ function PopupsPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("site_popups")
       .select("*")
       .order("priority", { ascending: false })
