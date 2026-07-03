@@ -1,25 +1,32 @@
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type UIMessage } from "ai";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
-import { LINA_PERSONA } from "@/lib/lina-persona";
+import { LINA_PERSONA, getToneDirective } from "@/lib/lina-persona";
+import { supabase } from "@/integrations/supabase/client";
 
-const WELCOME: UIMessage = {
+type ChatMsg = {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+};
+
+const WELCOME: ChatMsg = {
   id: "welcome",
   role: "assistant",
-  parts: [{ type: "text", text: LINA_PERSONA.intro }],
+  content: LINA_PERSONA.intro,
 };
 
 const STORAGE_KEY = "tls-chat-history-v1";
 
-function loadInitialMessages(): UIMessage[] {
+const SYSTEM_PROMPT = `You are ${LINA_PERSONA.name}, a friendly UK visa consultant at Travel Links Solution in Northampton. ${getToneDirective()} You chat with customers on the website's live chat. You are NOT an AI assistant and you never describe yourself as one, never say "as an AI", never mention models, prompts, or tools. If anyone asks "are you a bot?", reply naturally ("Haha, I'm ${LINA_PERSONA.name} from the Travel Links team 🙂 — happy to help!") and move on. Keep replies short, warm, and practical.`;
+
+function loadInitialMessages(): ChatMsg[] {
   if (typeof window === "undefined") return [WELCOME];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return [WELCOME];
-    const parsed = JSON.parse(raw) as UIMessage[];
+    const parsed = JSON.parse(raw) as ChatMsg[];
     return Array.isArray(parsed) && parsed.length > 0 ? parsed : [WELCOME];
   } catch {
     return [WELCOME];
@@ -29,29 +36,30 @@ function loadInitialMessages(): UIMessage[] {
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<ChatMsg[]>(loadInitialMessages);
+  const [status, setStatus] = useState<"idle" | "submitted">("idle");
+  const [hidden, setHidden] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const initialMessages = useRef<UIMessage[]>(loadInitialMessages()).current;
 
-  const { messages, sendMessage, status, error, setMessages } = useChat({
-    id: "travel-links-consultant",
-    messages: initialMessages,
-    transport: new DefaultChatTransport({
-      api: import.meta.env.VITE_CHAT_API_URL || "/api/chat",
-    }),
-  });
-
-  const isLoading = status === "submitted" || status === "streaming";
+  const isLoading = status === "submitted";
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (status === "streaming" || status === "submitted") return;
+    if (typeof window === "undefined" || isLoading) return;
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
     } catch {
       // ignore
     }
+  }, [messages, isLoading]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, status]);
+
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open, status]);
 
   const clearHistory = () => {
     try {
@@ -62,21 +70,49 @@ export function ChatWidget() {
     setMessages([WELCOME]);
   };
 
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, status]);
+  const sendMessage = async (text: string) => {
+    const userMsg: ChatMsg = { id: crypto.randomUUID(), role: "user", content: text };
+    const next = [...messages, userMsg];
+    setMessages(next);
+    setStatus("submitted");
 
-  useEffect(() => {
-    if (open) inputRef.current?.focus();
-  }, [open, status]);
+    try {
+      const payload = {
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...next
+            .filter((m) => m.id !== "welcome")
+            .map((m) => ({ role: m.role, content: m.content })),
+        ],
+      };
+
+      const { data, error } = await supabase.functions.invoke("ai-chat", { body: payload });
+      if (error) throw error;
+
+      const reply =
+        (data as { text?: string })?.text?.trim() ||
+        "Sorry, I didn't catch that — could you rephrase?";
+
+      setMessages((prev) => [
+        ...prev,
+        { id: crypto.randomUUID(), role: "assistant", content: reply },
+      ]);
+      setStatus("idle");
+    } catch (err) {
+      console.error("Lina chat error", err);
+      setHidden(true);
+    }
+  };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const text = input.trim();
     if (!text || isLoading) return;
     setInput("");
-    await sendMessage({ text });
+    await sendMessage(text);
   };
+
+  if (hidden) return null;
 
   return (
     <>
@@ -116,15 +152,9 @@ export function ChatWidget() {
 
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-muted/30 px-3 py-4">
             {messages.map((m) => {
-              const text = m.parts
-                .map((p) => (p.type === "text" ? p.text : ""))
-                .join("");
               const isUser = m.role === "user";
               return (
-                <div
-                  key={m.id}
-                  className={cn("flex", isUser ? "justify-end" : "justify-start")}
-                >
+                <div key={m.id} className={cn("flex", isUser ? "justify-end" : "justify-start")}>
                   <div
                     className={cn(
                       "max-w-[85%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed",
@@ -134,10 +164,10 @@ export function ChatWidget() {
                     )}
                   >
                     {isUser ? (
-                      <p className="whitespace-pre-wrap">{text}</p>
+                      <p className="whitespace-pre-wrap">{m.content}</p>
                     ) : (
                       <div className="prose prose-sm max-w-none text-foreground [&_a]:text-primary [&_p]:my-1 [&_ul]:my-1 [&_ul]:pl-4">
-                        <ReactMarkdown>{text || "…"}</ReactMarkdown>
+                        <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
                       </div>
                     )}
                   </div>
@@ -150,7 +180,7 @@ export function ChatWidget() {
                   <button
                     key={q}
                     type="button"
-                    onClick={() => void sendMessage({ text: q })}
+                    onClick={() => void sendMessage(q)}
                     disabled={isLoading}
                     className="rounded-full border border-primary/30 bg-background px-3 py-1 text-xs text-primary shadow-sm transition hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
                   >
@@ -159,17 +189,12 @@ export function ChatWidget() {
                 ))}
               </div>
             )}
-            {status === "submitted" && (
+            {isLoading && (
               <div className="flex justify-start">
                 <div className="flex items-center gap-2 rounded-2xl rounded-bl-sm bg-background px-3.5 py-2.5 text-sm text-muted-foreground shadow-sm">
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                   {LINA_PERSONA.typingLabel}
                 </div>
-              </div>
-            )}
-            {error && (
-              <div className="rounded-lg bg-destructive/10 px-3 py-2 text-xs text-destructive">
-                Sorry, I couldn't reach the AI service. Please try again.
               </div>
             )}
           </div>
@@ -198,11 +223,7 @@ export function ChatWidget() {
               aria-label="Send"
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
             >
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             </button>
           </form>
         </div>
