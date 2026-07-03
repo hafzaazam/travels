@@ -287,3 +287,9 @@ html:has(.process-snap) { scroll-snap-type: y proximity; }
 @utility animate-mesh-1 { animation: mesh-float 18s ease-in-out infinite; }
 @utility animate-mesh-2 { animation: mesh-float-alt 22s ease-in-out infinite; }
 @utility animate-mesh-3 { animation: mesh-float 25s ease-in-out infinite reverse; }
+
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
