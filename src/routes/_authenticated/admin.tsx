@@ -115,8 +115,8 @@ function AdminPage() {
             </button>
           </div>
         </div>
-        <div className="mx-auto max-w-7xl px-5 lg:px-8">
-          <nav className="flex gap-1 -mb-px">
+        <div className="mx-auto max-w-7xl px-2 sm:px-5 lg:px-8">
+          <nav className="flex gap-0.5 sm:gap-1 -mb-px overflow-x-auto scrollbar-none">
             {([
               ["dashboard", LayoutDashboard, "Dashboard"],
               ["bookings", Calendar, "Bookings"],
@@ -130,13 +130,13 @@ function AdminPage() {
               <button
                 key={key}
                 onClick={() => setTab(key)}
-                className={`inline-flex items-center gap-1.5 px-4 py-3 text-sm font-semibold border-b-2 transition ${
+                className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold border-b-2 transition whitespace-nowrap shrink-0 ${
                   tab === key
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className="h-4 w-4" /> {label}
+                <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> {label}
               </button>
             ))}
           </nav>
