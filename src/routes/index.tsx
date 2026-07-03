@@ -1,24 +1,39 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) return toast.error(error.message);
+    toast.success("Signed out");
+    navigate({ to: "/auth" });
+  }
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background p-4">
+      <h1 className="text-3xl font-semibold">Home</h1>
+      {loading ? (
+        <p className="text-muted-foreground">Loading...</p>
+      ) : user ? (
+        <>
+          <p className="text-muted-foreground">Signed in as {user.email}</p>
+          <Button onClick={signOut}>Log out</Button>
+        </>
+      ) : (
+        <Button asChild>
+          <Link to="/auth">Sign in</Link>
+        </Button>
+      )}
     </div>
   );
 }
