@@ -123,7 +123,7 @@ export function ChatWidget() {
     await sendMessage(text);
   };
 
-  if (hidden) return null; // (kept for compatibility — no longer used)
+  
 
   return (
     <>
