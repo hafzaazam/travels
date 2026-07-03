@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
@@ -12,7 +12,7 @@ import { DEFAULT_CONTACT_INFO, invalidateContactInfoCache, type ContactInfo } fr
 import { BookingsPanel } from "@/components/admin/BookingsPanel";
 import { BlogPanel } from "@/components/admin/BlogPanel";
 
-export const Route = createFileRoute("/_authenticated/admin")({
+export const Route = createLazyFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
       { title: "Admin Dashboard — Travel Links Solution" },
