@@ -5,14 +5,9 @@ import { Logo } from "./Logo";
 import { openApplyDialog } from "./ApplyDialog";
 
 const NAV: { label: string; href: string; route?: boolean }[] = [
-  { label: "Home", href: "#home" },
+  { label: "Home", href: "/", route: true },
   { label: "About", href: "/about", route: true },
   { label: "Services", href: "/services", route: true },
-  { label: "Countries", href: "#countries" },
-  { label: "Why Us", href: "#why" },
-  { label: "Process", href: "#process" },
-  { label: "Reviews", href: "#testimonials" },
-  { label: "FAQ", href: "#faq" },
   { label: "Book", href: "/book", route: true },
   { label: "Blog", href: "/blog", route: true },
   { label: "Contact", href: "/contact", route: true },
