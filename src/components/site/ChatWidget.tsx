@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { LINA_PERSONA, getToneDirective } from "@/lib/lina-persona";
 import { supabase } from "@/integrations/supabase/client";
+import { useContactInfo } from "@/hooks/useContactInfo";
 
 type ChatMsg = {
   id: string;
@@ -38,9 +39,10 @@ export function ChatWidget() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMsg[]>(loadInitialMessages);
   const [status, setStatus] = useState<"idle" | "submitted">("idle");
-  const [hidden, setHidden] = useState(false);
+  const [failed, setFailed] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const { whatsapp_e164 } = useContactInfo();
 
   const isLoading = status === "submitted";
 
@@ -100,9 +102,18 @@ export function ChatWidget() {
       setStatus("idle");
     } catch (err) {
       console.error("Lina chat error", err);
-      setHidden(true);
+      setFailed(true);
+      setStatus("idle");
     }
   };
+
+  const waHref = (() => {
+    const lastUser = [...messages].reverse().find((m) => m.role === "user")?.content;
+    const text =
+      lastUser ||
+      "Hi Travel Links Solution, I couldn't reach Lina on the website chat — can you help?";
+    return `https://wa.me/${whatsapp_e164}?text=${encodeURIComponent(text)}`;
+  })();
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -112,7 +123,7 @@ export function ChatWidget() {
     await sendMessage(text);
   };
 
-  if (hidden) return null;
+  if (hidden) return null; // (kept for compatibility — no longer used)
 
   return (
     <>
