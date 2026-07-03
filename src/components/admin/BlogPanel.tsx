@@ -81,7 +81,7 @@ export function BlogPanel() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("blog_posts").select("*").order("created_at", { ascending: false });
     if (error) toast.error(error.message);
     setPosts((data as BlogPost[]) ?? []);

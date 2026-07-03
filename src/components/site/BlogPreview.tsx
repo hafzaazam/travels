@@ -21,7 +21,7 @@ export function BlogPreview() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from("blog_posts")
         .select("id, slug, title, excerpt, cover_image, tags, published_at, created_at")
         .eq("published", true)

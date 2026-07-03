@@ -49,7 +49,7 @@ export function SitePopup() {
     let mounted = true;
     (async () => {
       const nowIso = new Date().toISOString();
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from("site_popups")
         .select("id,title,body,image_url,cta_label,cta_url,placement,frequency,dismissible")
         .eq("active", true)
