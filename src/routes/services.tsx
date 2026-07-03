@@ -300,6 +300,11 @@ function ServicesPage() {
         </section>
 
 
+        <RelatedLinks
+          keys={["countries", "compare", "book", "blog", "about", "contact"]}
+          title="Continue your visa journey"
+          subtitle="Related resources to plan your application."
+        />
         <CTABanner />
       </main>
       <Footer />
