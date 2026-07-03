@@ -1,7 +1,6 @@
 import { createMiddleware } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
-import type { Database } from "./types";
 
 const SUPABASE_URL = "https://utqkhttzsyezrwumoplk.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_u1f8QAZRqz_rdtV7mAYLyw_QO_hZlJ7";
@@ -37,7 +36,7 @@ export const requireSupabaseAuth = createMiddleware({ type: "function" }).server
     if (!token) throw new Error("Unauthorized: No token provided");
     if (token.split(".").length !== 3) throw new Error("Unauthorized: Invalid token");
 
-    const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
       global: {
         fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY),
         headers: { Authorization: `Bearer ${token}` },
