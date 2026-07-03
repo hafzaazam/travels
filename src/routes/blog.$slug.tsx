@@ -234,6 +234,10 @@ function PostPage() {
             </div>
           </section>
         )}
+        <RelatedLinks
+          keys={["services", "countries", "compare", "book", "contact"]}
+          title="Ready to take the next step?"
+        />
       </main>
       <Footer />
     </div>
