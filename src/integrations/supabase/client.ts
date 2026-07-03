@@ -1,7 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
+import type { Database } from "./database.types";
 
 // Hardcoded because Lovable reserves VITE_/SUPABASE_ env prefixes.
-// These are the publishable (public) credentials — safe in browser bundles.
+// These are publishable (public) credentials — safe in the browser bundle.
 const SUPABASE_URL = "https://utqkhttzsyezrwumoplk.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_u1f8QAZRqz_rdtV7mAYLyw_QO_hZlJ7";
 
@@ -26,7 +27,7 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
 }
 
 function createSupabaseClient() {
-  return createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     global: { fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY) },
     auth: {
       storage: typeof window !== "undefined" ? localStorage : undefined,
