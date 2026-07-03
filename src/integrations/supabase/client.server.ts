@@ -1,6 +1,7 @@
 // Server-side Supabase admin client (bypasses RLS via service role).
-// Requires APP_SUPABASE_SERVICE_ROLE_KEY set in project secrets (SUPABASE_ prefix is reserved by Lovable).
+// Requires APP_SUPABASE_SERVICE_ROLE_KEY in project secrets (SUPABASE_ prefix is reserved by Lovable).
 import { createClient } from "@supabase/supabase-js";
+import type { Database } from "./database.types";
 
 const SUPABASE_URL = "https://utqkhttzsyezrwumoplk.supabase.co";
 
@@ -29,7 +30,7 @@ function createSupabaseAdminClient() {
   if (!SERVICE_ROLE_KEY) {
     throw new Error("Missing APP_SUPABASE_SERVICE_ROLE_KEY. Add it in project secrets.");
   }
-  return createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+  return createClient<Database>(SUPABASE_URL, SERVICE_ROLE_KEY, {
     global: { fetch: createSupabaseFetch(SERVICE_ROLE_KEY) },
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
   });
