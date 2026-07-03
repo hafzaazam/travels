@@ -3,6 +3,7 @@ import aboutVisa from "@/assets/about-visa.png.asset.json";
 import { Toaster } from "@/components/ui/sonner";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { RelatedLinks } from "@/components/site/RelatedLinks";
 import { BackToTop } from "@/components/site/BackToTop";
 import { Reveal } from "@/components/site/Reveal";
 import { WhyUs } from "@/components/site/WhyUs";
