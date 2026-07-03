@@ -2,19 +2,14 @@
 // Used by public-site user features (contact form, reviews, newsletter,
 // blog reads, popups). Admin/backoffice features continue to use the
 // Lovable Cloud client at "@/integrations/supabase/client".
+//
+// The URL and anon key are publishable (safe to ship in client code).
 import { createClient } from "@supabase/supabase-js";
 
-const url = import.meta.env.VITE_APP_SUPABASE_URL as string | undefined;
-const anonKey = import.meta.env.VITE_APP_SUPABASE_ANON_KEY as string | undefined;
+const APP_SUPABASE_URL = "https://utqkhttzsyezrwumoplk.supabase.co";
+const APP_SUPABASE_ANON_KEY = "sb_publishable_u1f8QAZRqz_rdtV7mAYLyw_QO_hZlJ7";
 
-if (!url || !anonKey) {
-  // Surface a clear error early — set these in Project Settings → Secrets.
-  console.warn(
-    "[external-supabase] VITE_APP_SUPABASE_URL or VITE_APP_SUPABASE_ANON_KEY is not set.",
-  );
-}
-
-export const supabaseApp = createClient(url ?? "", anonKey ?? "", {
+export const supabaseApp = createClient(APP_SUPABASE_URL, APP_SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
