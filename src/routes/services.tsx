@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { RelatedLinks } from "@/components/site/RelatedLinks";
 import { BackToTop } from "@/components/site/BackToTop";
 import { Services } from "@/components/site/Services";
 import { Process } from "@/components/site/Process";
