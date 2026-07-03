@@ -56,7 +56,7 @@ export function ApplyDialog() {
       : `Interested in ${parsed.data.visa} visa for ${parsed.data.country}.`;
 
     setSaving(true);
-    const { error: dbError } = await supabase.from("contact_submissions").insert({
+    const { error: dbError } = await (supabase as any).from("contact_submissions").insert({
       name: parsed.data.name,
       email: parsed.data.email,
       phone: parsed.data.phone,

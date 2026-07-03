@@ -82,7 +82,7 @@ export function BlogPanel() {
   const load = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase
-      .from("blog_posts" as never).select("*").order("created_at", { ascending: false });
+      .from("blog_posts").select("*").order("created_at", { ascending: false });
     if (error) toast.error(error.message);
     setPosts((data as BlogPost[]) ?? []);
     setLoading(false);
@@ -113,7 +113,7 @@ export function BlogPanel() {
 
   const togglePublish = async (p: BlogPost) => {
     const next = !p.published;
-    const { error } = await supabase.from("blog_posts" as never).update({
+    const { error } = await (supabase as any).from("blog_posts").update({
       published: next,
       published_at: next ? p.published_at ?? new Date().toISOString() : p.published_at,
     }).eq("id", p.id);
@@ -124,7 +124,7 @@ export function BlogPanel() {
 
   const remove = async (p: BlogPost) => {
     if (!confirm(`Delete "${p.title}"? This cannot be undone.`)) return;
-    const { error } = await supabase.from("blog_posts" as never).delete().eq("id", p.id);
+    const { error } = await (supabase as any).from("blog_posts").delete().eq("id", p.id);
     if (error) return toast.error(error.message);
     toast.success("Post deleted");
     load();
@@ -134,7 +134,7 @@ export function BlogPanel() {
     const base = `${p.slug}-copy`;
     let slug = base; let i = 2;
     while (posts.some((x) => x.slug === slug)) { slug = `${base}-${i++}`; }
-    const { error } = await supabase.from("blog_posts" as never).insert({
+    const { error } = await (supabase as any).from("blog_posts").insert({
       slug, title: `${p.title} (copy)`, excerpt: p.excerpt, content: p.content,
       cover_image: p.cover_image, author: p.author, tags: p.tags,
       published: false, published_at: null,
@@ -463,8 +463,8 @@ function PostEditor({
     };
 
     const { error } = isEdit
-      ? await supabase.from("blog_posts" as never).update(payload).eq("id", initial.id!)
-      : await supabase.from("blog_posts" as never).insert(payload);
+      ? await (supabase as any).from("blog_posts").update(payload).eq("id", initial.id!)
+      : await (supabase as any).from("blog_posts").insert(payload);
 
     setSaving(false);
     if (error) return toast.error(error.message);
