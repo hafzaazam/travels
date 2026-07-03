@@ -206,10 +206,10 @@ function DashboardPanel({ onNavigate, userEmail }: { onNavigate: (t: Tab) => voi
 
   return (
     <div>
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+      <div className="mb-5 sm:mb-8 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="font-display text-2xl font-bold">Welcome back</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="font-display text-xl sm:text-2xl font-bold">Welcome back</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Signed in as <span className="font-medium text-foreground">{userEmail}</span>. Manage every customer-facing section below.
           </p>
         </div>
@@ -218,22 +218,36 @@ function DashboardPanel({ onNavigate, userEmail }: { onNavigate: (t: Tab) => voi
         </button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map(({ key, icon: Icon, label, description, total, highlight, highlightLabel }) => (
           <button
             key={key}
             onClick={() => onNavigate(key)}
-            className="group text-left rounded-3xl border border-border bg-white p-6 shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all"
+            className="group text-left rounded-2xl sm:rounded-3xl border border-border bg-white p-3.5 sm:p-6 shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all"
           >
-            <div className="flex items-start justify-between">
-              <div className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-brand text-white shadow-glow">
-                <Icon className="h-5 w-5" />
+            <div className="flex items-center gap-3 sm:block">
+              <div className="grid h-9 w-9 sm:h-11 sm:w-11 shrink-0 place-items-center rounded-xl sm:rounded-2xl bg-gradient-brand text-white shadow-glow">
+                <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+              <div className="min-w-0 flex-1 sm:hidden">
+                <div className="font-display text-sm font-semibold truncate">{label}</div>
+                <p className="text-[11px] text-muted-foreground truncate">{description}</p>
+              </div>
+              <div className="flex items-baseline gap-1.5 sm:hidden">
+                <div className="font-display text-xl font-bold text-gradient-brand">
+                  {loading ? "…" : total}
+                </div>
+                {!loading && highlight > 0 && (
+                  <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+                    {highlight}
+                  </span>
+                )}
+              </div>
+              <ArrowRight className="hidden sm:block h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary sm:ml-auto" />
             </div>
-            <div className="mt-5 font-display text-lg font-semibold">{label}</div>
-            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{description}</p>
-            <div className="mt-5 flex items-baseline gap-2">
+            <div className="hidden sm:block mt-5 font-display text-lg font-semibold">{label}</div>
+            <p className="hidden sm:block mt-1 text-xs text-muted-foreground leading-relaxed">{description}</p>
+            <div className="hidden sm:flex mt-5 items-baseline gap-2">
               <div className="font-display text-3xl font-bold text-gradient-brand">
                 {loading ? "…" : total}
               </div>
@@ -247,10 +261,10 @@ function DashboardPanel({ onNavigate, userEmail }: { onNavigate: (t: Tab) => voi
         ))}
       </div>
 
-      <div className="mt-10 rounded-3xl border border-border bg-white p-6 shadow-soft">
-        <h3 className="font-display text-base font-semibold">Quick links</h3>
+      <div className="mt-6 sm:mt-10 rounded-2xl sm:rounded-3xl border border-border bg-white p-4 sm:p-6 shadow-soft">
+        <h3 className="font-display text-sm sm:text-base font-semibold">Quick links</h3>
         <p className="text-xs text-muted-foreground">Jump to other parts of the site.</p>
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-3 sm:mt-4 flex flex-wrap gap-2">
           <Link to="/" className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-white px-3 py-1.5 text-xs font-semibold hover:bg-secondary">
             <Home className="h-3.5 w-3.5" /> View live site
           </Link>
@@ -262,6 +276,7 @@ function DashboardPanel({ onNavigate, userEmail }: { onNavigate: (t: Tab) => voi
           </a>
         </div>
       </div>
+
     </div>
   );
 }
