@@ -4,7 +4,7 @@ import { z } from "zod";
 import { SectionHeading } from "./Section";
 import { toast } from "sonner";
 import { useForm } from "@formspree/react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { useContactInfo } from "@/hooks/useContactInfo";
 import { useBookingSettings } from "@/hooks/useBookingSettings";
 import { BookingFormCompact } from "./BookingFormCompact";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Calendar, FileText } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { Eyebrow } from "@/components/site/Eyebrow";
 import { Reveal } from "@/components/site/Reveal";
 

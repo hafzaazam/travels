@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 

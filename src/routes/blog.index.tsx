@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, FileText, Search, X } from "lucide-react";
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 
