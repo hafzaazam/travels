@@ -9,6 +9,7 @@ const BASE_NAV: { label: string; href: string; route?: boolean }[] = [
   { label: "Home", href: "/", route: true },
   { label: "About", href: "/about", route: true },
   { label: "Services", href: "/services", route: true },
+  { label: "Compare", href: "/compare", route: true },
   { label: "Book", href: "/book", route: true },
   { label: "Blog", href: "/blog", route: true },
   { label: "Contact", href: "/contact", route: true },
