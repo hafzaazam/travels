@@ -208,7 +208,34 @@ export function ChatWidget() {
                 </div>
               </div>
             )}
+            {failed && (
+              <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm">
+                <p className="font-medium text-foreground">
+                  Lina is offline right now.
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  Message us on WhatsApp instead — we usually reply within a few minutes.
+                </p>
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center gap-2 rounded-lg bg-[#25D366] px-3 py-2 text-xs font-semibold text-white shadow hover:opacity-90"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Chat on WhatsApp
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setFailed(false)}
+                  className="ml-2 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                >
+                  Try again
+                </button>
+              </div>
+            )}
           </div>
+
 
           <form
             onSubmit={onSubmit}
