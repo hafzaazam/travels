@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Calendar, CreditCard, Landmark, CheckCircle2, Copy, Send } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import type { BookingSettings } from "@/hooks/useBookingSettings";
 
 const SERVICES = [

@@ -4,7 +4,7 @@ import {
   Save, RefreshCw, Check, X, Trash2, Landmark, Calendar,
   Mail, Phone, CreditCard, Clock, Filter, Search,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { invalidateBookingSettingsCache, type BookingSettings, DEFAULT_BOOKING_SETTINGS } from "@/hooks/useBookingSettings";
 
 type Booking = {
