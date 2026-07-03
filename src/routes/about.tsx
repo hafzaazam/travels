@@ -349,6 +349,10 @@ function AboutPage() {
           </div>
         </section>
 
+        <RelatedLinks
+          keys={["services", "countries", "compare", "book", "blog", "contact"]}
+          title="Explore Travel Links"
+        />
         <CTABanner />
       </main>
       <Footer />
