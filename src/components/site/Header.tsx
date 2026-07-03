@@ -21,6 +21,11 @@ export function Header() {
   const [active, setActive] = useState<string>("#home");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isHome = pathname === "/";
+  const { data: bookingSettings } = useBookingSettings();
+  const NAV = useMemo(
+    () => BASE_NAV.filter((n) => n.href !== "/book" || bookingSettings?.active),
+    [bookingSettings?.active],
+  );
   const hrefFor = (href: string) => {
     if (href.startsWith("/")) return href;
     return isHome ? href : `/${href}`;
