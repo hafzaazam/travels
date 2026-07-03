@@ -7,13 +7,11 @@ import { createClient } from "@supabase/supabase-js";
 const APP_SUPABASE_URL = "https://utqkhttzsyezrwumoplk.supabase.co";
 
 function createAppAdminClient() {
-  const key =
-    process.env.APP_SUPABASE_SERVICE_ROLE_KEY ??
-    process.env.VITE_APP_SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.APP_SUPABASE_SERVICE_ROLE_KEY;
 
   if (!key) {
     throw new Error(
-      "Missing APP_SUPABASE_SERVICE_ROLE_KEY. Add it to your environment.",
+      "Missing APP_SUPABASE_SERVICE_ROLE_KEY environment variable.",
     );
   }
 
