@@ -1,0 +1,24 @@
+{
+  "name": "Travel Links Solution",
+  "short_name": "Travel Links",
+  "description": "Trusted UK visa consultancy in Northampton — tourist, family, business & student visas across 25+ countries.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#2157f3",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/__l5e/assets-v1/7af30677-21db-4df6-b49b-b973df323810/travel-links-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/__l5e/assets-v1/7af30677-21db-4df6-b49b-b973df323810/travel-links-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
