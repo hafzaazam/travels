@@ -6,7 +6,7 @@ import {
   Download, Search, MessageSquare, Users, ShieldCheck, Home,
   LayoutDashboard, ArrowRight, Save, MapPin, Megaphone, Plus, Pencil, Calendar, FileText,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { Logo } from "@/components/site/Logo";
 import { DEFAULT_CONTACT_INFO, invalidateContactInfoCache, type ContactInfo } from "@/hooks/useContactInfo";
 import { BookingsPanel } from "@/components/admin/BookingsPanel";

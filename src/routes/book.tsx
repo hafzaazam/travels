@@ -7,7 +7,7 @@ import {
   Calendar, CreditCard, Landmark, CheckCircle2, Copy, ArrowRight,
   Sparkles, ShieldCheck, Clock,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { useBookingSettings } from "@/hooks/useBookingSettings";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";

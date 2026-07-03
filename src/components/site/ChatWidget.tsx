@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { LINA_PERSONA, getToneDirective } from "@/lib/lina-persona";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { useContactInfo } from "@/hooks/useContactInfo";
 
 type ChatMsg = {

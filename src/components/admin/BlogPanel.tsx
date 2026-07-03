@@ -7,7 +7,7 @@ import {
   Bold, Italic, Heading1, Heading2, Heading3, Link as LinkIcon, Image as ImageIcon,
   List, ListOrdered, Quote, Code, Minus, Lock, Unlock, Clock, Copy, Upload, Loader2,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 
 const SIGNED_URL_TTL = 60 * 60 * 24 * 365 * 10;
 
