@@ -35,7 +35,7 @@ export function Testimonials() {
   }, []);
 
   useEffect(() => {
-    supabase
+    (supabase as any)
       .from("reviews")
       .select("id,name,country,rating,comment")
       .eq("approved", true)
