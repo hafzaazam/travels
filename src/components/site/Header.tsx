@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { Menu, X, ArrowRight, PhoneCall } from "lucide-react";
 import { Logo } from "./Logo";
 import { openApplyDialog } from "./ApplyDialog";
+import { useBookingSettings } from "@/hooks/useBookingSettings";
 
-const NAV: { label: string; href: string; route?: boolean }[] = [
+const BASE_NAV: { label: string; href: string; route?: boolean }[] = [
   { label: "Home", href: "/", route: true },
   { label: "About", href: "/about", route: true },
   { label: "Services", href: "/services", route: true },
@@ -20,6 +21,11 @@ export function Header() {
   const [active, setActive] = useState<string>("#home");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isHome = pathname === "/";
+  const { data: bookingSettings } = useBookingSettings();
+  const NAV = useMemo(
+    () => BASE_NAV.filter((n) => n.href !== "/book" || bookingSettings?.active),
+    [bookingSettings?.active],
+  );
   const hrefFor = (href: string) => {
     if (href.startsWith("/")) return href;
     return isHome ? href : `/${href}`;
