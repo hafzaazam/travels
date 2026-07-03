@@ -154,8 +154,12 @@ function AdminPage() {
 
       <main className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
         {tab === "dashboard" && <DashboardPanel onNavigate={setTab} userEmail={userEmail} />}
-        {tab === "bookings" && <BookingsPanel />}
-        {tab === "blog" && <BlogPanel />}
+        {tab === "bookings" && (
+          <Suspense fallback={<PanelFallback />}><BookingsPanel /></Suspense>
+        )}
+        {tab === "blog" && (
+          <Suspense fallback={<PanelFallback />}><BlogPanel /></Suspense>
+        )}
         {tab === "contacts" && <ContactsPanel />}
         {tab === "reviews" && <ReviewsPanel />}
         {tab === "subscribers" && <SubscribersPanel />}
