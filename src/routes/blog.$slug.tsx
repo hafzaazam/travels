@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { RelatedLinks } from "@/components/site/RelatedLinks";
 import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -234,6 +235,10 @@ function PostPage() {
             </div>
           </section>
         )}
+        <RelatedLinks
+          keys={["services", "countries", "compare", "book", "contact"]}
+          title="Ready to take the next step?"
+        />
       </main>
       <Footer />
     </div>
