@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { Menu, X, ArrowRight, PhoneCall } from "lucide-react";
 import { Logo } from "./Logo";
 import { openApplyDialog } from "./ApplyDialog";
+import { useBookingSettings } from "@/hooks/useBookingSettings";
 
-const NAV: { label: string; href: string; route?: boolean }[] = [
+const BASE_NAV: { label: string; href: string; route?: boolean }[] = [
   { label: "Home", href: "/", route: true },
   { label: "About", href: "/about", route: true },
   { label: "Services", href: "/services", route: true },
