@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionHeading } from "./Section";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 
 type Review = {
   id: string;

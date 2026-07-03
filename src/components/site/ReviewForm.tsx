@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Star, Send } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { SectionHeading } from "./Section";
 
 const schema = z.object({

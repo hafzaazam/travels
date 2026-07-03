@@ -3,7 +3,7 @@ import { MessageCircle, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Logo } from "./Logo";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { useContactInfo } from "@/hooks/useContactInfo";
 
 const emailSchema = z.string().trim().email("Enter a valid email").max(255);
