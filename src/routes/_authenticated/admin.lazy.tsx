@@ -1,5 +1,5 @@
 import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
   Star, Mail, Phone, Trash2, Check, X, LogOut, RefreshCw,
@@ -9,17 +9,26 @@ import {
 import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { Logo } from "@/components/site/Logo";
 import { DEFAULT_CONTACT_INFO, invalidateContactInfoCache, type ContactInfo } from "@/hooks/useContactInfo";
-import { BookingsPanel } from "@/components/admin/BookingsPanel";
-import { BlogPanel } from "@/components/admin/BlogPanel";
+
+// Lazy-load heavy admin panels — only fetch their chunk when the tab is opened.
+const BookingsPanel = lazy(() =>
+  import("@/components/admin/BookingsPanel").then((m) => ({ default: m.BookingsPanel })),
+);
+const BlogPanel = lazy(() =>
+  import("@/components/admin/BlogPanel").then((m) => ({ default: m.BlogPanel })),
+);
+
+function PanelFallback() {
+  return (
+    <div className="grid gap-3">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="h-24 rounded-2xl bg-white/60 border border-border animate-pulse" />
+      ))}
+    </div>
+  );
+}
 
 export const Route = createLazyFileRoute("/_authenticated/admin")({
-  head: () => ({
-    meta: [
-      { title: "Admin Dashboard — Travel Links Solution" },
-      { name: "description", content: "Private admin dashboard for managing Travel Links Solution contacts, reviews, and subscribers." },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
-  }),
   component: AdminPage,
 });
 
