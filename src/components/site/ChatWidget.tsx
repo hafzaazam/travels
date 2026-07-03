@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { LINA_PERSONA, getToneDirective } from "@/lib/lina-persona";
 import { supabase } from "@/integrations/supabase/client";
+import { useContactInfo } from "@/hooks/useContactInfo";
 
 type ChatMsg = {
   id: string;
@@ -38,9 +39,10 @@ export function ChatWidget() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMsg[]>(loadInitialMessages);
   const [status, setStatus] = useState<"idle" | "submitted">("idle");
-  const [hidden, setHidden] = useState(false);
+  const [failed, setFailed] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const { whatsapp_e164 } = useContactInfo();
 
   const isLoading = status === "submitted";
 
@@ -100,9 +102,18 @@ export function ChatWidget() {
       setStatus("idle");
     } catch (err) {
       console.error("Lina chat error", err);
-      setHidden(true);
+      setFailed(true);
+      setStatus("idle");
     }
   };
+
+  const waHref = (() => {
+    const lastUser = [...messages].reverse().find((m) => m.role === "user")?.content;
+    const text =
+      lastUser ||
+      "Hi Travel Links Solution, I couldn't reach Lina on the website chat — can you help?";
+    return `https://wa.me/${whatsapp_e164}?text=${encodeURIComponent(text)}`;
+  })();
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -112,7 +123,7 @@ export function ChatWidget() {
     await sendMessage(text);
   };
 
-  if (hidden) return null;
+  
 
   return (
     <>
@@ -197,7 +208,34 @@ export function ChatWidget() {
                 </div>
               </div>
             )}
+            {failed && (
+              <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm">
+                <p className="font-medium text-foreground">
+                  Lina is offline right now.
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  Message us on WhatsApp instead — we usually reply within a few minutes.
+                </p>
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center gap-2 rounded-lg bg-[#25D366] px-3 py-2 text-xs font-semibold text-white shadow hover:opacity-90"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Chat on WhatsApp
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setFailed(false)}
+                  className="ml-2 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                >
+                  Try again
+                </button>
+              </div>
+            )}
           </div>
+
 
           <form
             onSubmit={onSubmit}
