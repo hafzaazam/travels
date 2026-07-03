@@ -41,8 +41,8 @@ export function Testimonials() {
       .eq("approved", true)
       .order("created_at", { ascending: false })
       .limit(20)
-      .then(({ data }) => {
-        if (data && data.length > 0) setReviews(data as Review[]);
+      .then(({ data }: { data: Review[] | null }) => {
+        if (data && data.length > 0) setReviews(data);
       });
   }, []);
 
