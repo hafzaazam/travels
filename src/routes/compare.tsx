@@ -36,6 +36,34 @@ export const Route = createFileRoute("/compare")({
       { name: "twitter:description", content: "Side-by-side visa comparison across 25+ destinations — processing time, fees, requirements, pros and cons." },
     ],
     links: [{ rel: "canonical", href: "https://travellinks.uk/compare" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://travellinks.uk/compare#webpage",
+              url: "https://travellinks.uk/compare",
+              name: "Compare Visas & Countries — Travel Links Solution",
+              description:
+                "Side-by-side visa comparison across 25+ destinations — processing time, fees, requirements, pros and cons.",
+              isPartOf: { "@id": "https://travellinks.uk/#website" },
+              about: { "@id": "https://travellinks.uk/#organization" },
+              inLanguage: "en-GB",
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://travellinks.uk/" },
+                { "@type": "ListItem", position: 2, name: "Compare Visas", item: "https://travellinks.uk/compare" },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
   component: ComparePage,
 });
