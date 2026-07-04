@@ -60,7 +60,7 @@ export const Route = createFileRoute("/blog/$slug")({
       post.meta_description?.trim() ||
       post.excerpt ||
       (post.content ? post.content.replace(/[#*_`>[\]()!-]|<[^>]+>/g, "").trim().slice(0, 155) : "");
-    const FALLBACK_OG = "https://travellinks.uk/__l5e/assets-v1/3c87610d-e03b-4302-b077-b7b31f0027e7/why-us-plane.png";
+    const FALLBACK_OG = "https://travellinks.uk/__l5e/assets-v1/2672f8ec-8974-4080-8be8-547d8161e57c/why-us-plane.png";
     const rawImage = post.og_image?.trim() || post.cover_image || undefined;
     const image = rawImage
       ? (rawImage.startsWith("http") ? rawImage : `${SITE}${rawImage.startsWith("/") ? "" : "/"}${rawImage}`)
