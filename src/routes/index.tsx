@@ -24,15 +24,15 @@ import { Reveal } from "@/components/site/Reveal";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Travel Links Solution | Travel Links UK Visa Consultancy Northampton" },
-      { name: "description", content: "Travel Links Solution (Travel Links UK) — trusted UK visa consultancy in Northampton. Travellinks visa experts for tourist, family, business & student visas across 25+ countries with a 98% approval rate." },
-      { name: "keywords", content: "Travel Links Solution, Travel Links, Travellinks, Travellinks Solution, Travellinks visa, Travel Links UK visa, Travel Links consultancy, Travel Links UK, Travellinks UK, Travel Links Northampton, Travellinks consultancy, UK visa consultant, visa consultancy Northampton, tourist visa UK, business visa UK, family visa UK, student visa UK, Schengen visa UK, USA visa from UK, Canada visa UK, Australia visa UK, visa refusal appeal, visa application help UK" },
-      { property: "og:title", content: "Travel Links Solution | Travel Links UK Visa Consultancy Northampton" },
-      { property: "og:description", content: "Travel Links Solution (Travellinks UK) — trusted visa consultancy for 25+ countries. Tourist, family, business & student visa experts in Northampton." },
+      { title: "UK Visa Consultant Northampton | Schengen, Visitor & Family Visa Experts — Travel Links" },
+      { name: "description", content: "UK visa consultant in Northampton. Help with Schengen visa from UK, UK visitor visa applications, family visit visa UK, student & work visas for 25+ countries. 98% approval rate." },
+      { name: "keywords", content: "uk visa consultant, schengen visa from uk, uk visitor visa application, family visit visa uk, uk student visa help, canada study visa from uk, uk work visa consultant, visa consultancy uk, visa consultant northampton, best visa agency uk, uk tourist visa services, Travel Links Solution, Travellinks UK" },
+      { property: "og:title", content: "UK Visa Consultant Northampton | Schengen, Visitor & Family Visas — Travel Links" },
+      { property: "og:description", content: "Trusted UK visa consultancy for Schengen, visitor, family, student & work visas across 25+ countries. Free consultation with Northampton-based experts." },
       { property: "og:url", content: "https://travellinks.uk/" },
       { property: "og:image", content: "https://travellinks.uk/__l5e/assets-v1/86d58950-39c0-4ea4-b8dd-f0dbead6bc05/travel-links-logo.png" },
-      { name: "twitter:title", content: "Travel Links Solution | Travellinks UK Visa Consultancy" },
-      { name: "twitter:description", content: "Travel Links UK visa consultancy — tourist, family, business & student visas across 25+ countries with a 98% approval rate." },
+      { name: "twitter:title", content: "UK Visa Consultant Northampton — Schengen, Visitor & Family Visas" },
+      { name: "twitter:description", content: "Schengen from UK, visitor, family, student & work visas across 25+ countries. 98% approval rate." },
       { name: "twitter:image", content: "https://travellinks.uk/__l5e/assets-v1/86d58950-39c0-4ea4-b8dd-f0dbead6bc05/travel-links-logo.png" },
     ],
     links: [
