@@ -162,7 +162,22 @@ export const Route = createFileRoute("/countries/$slug")({
 function CountryPage() {
   const { country } = Route.useLoaderData();
 
-  const otherCountries = COUNTRIES.filter((c) => c.slug !== country.slug).slice(0, 6);
+  const currentIsSchengen = isSchengen(country.slug);
+  const sameGroup = COUNTRIES.filter(
+    (c) => c.slug !== country.slug && isSchengen(c.slug) === currentIsSchengen,
+  ).slice(0, 6);
+  const otherGroup = COUNTRIES.filter(
+    (c) => isSchengen(c.slug) !== currentIsSchengen,
+  ).slice(0, 4);
+  const sameGroupLabel = currentIsSchengen
+    ? "Other Schengen destinations"
+    : "Other non-Schengen destinations";
+  const otherGroupLabel = currentIsSchengen
+    ? "Prefer a non-Schengen route?"
+    : "Considering a Schengen visa instead?";
+  const otherGroupBlurb = currentIsSchengen
+    ? `A ${country.name} visa covers 29 Schengen countries. If you're travelling further afield, these non-Schengen destinations are the most-requested alternatives.`
+    : `A ${country.name} visa doesn't include Schengen access. If you're planning a European trip too, these Schengen destinations pair well.`;
 
   return (
     <div className="min-h-screen bg-background">
