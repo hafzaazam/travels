@@ -24,15 +24,15 @@ import { Reveal } from "@/components/site/Reveal";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "UK Visa Consultant Northampton | Schengen, Visitor & Family Visa Experts — Travel Links" },
-      { name: "description", content: "UK visa consultant in Northampton. Help with Schengen visa from UK, UK visitor visa applications, family visit visa UK, student & work visas for 25+ countries. 98% approval rate." },
-      { name: "keywords", content: "uk visa consultant, schengen visa from uk, uk visitor visa application, family visit visa uk, uk student visa help, canada study visa from uk, uk work visa consultant, visa consultancy uk, visa consultant northampton, best visa agency uk, uk tourist visa services, Travel Links Solution, Travellinks UK" },
-      { property: "og:title", content: "UK Visa Consultant Northampton | Schengen, Visitor & Family Visas — Travel Links" },
-      { property: "og:description", content: "Trusted UK visa consultancy for Schengen, visitor, family, student & work visas across 25+ countries. Free consultation with Northampton-based experts." },
+      { title: "Travel Links Solution | Global Visa Consultants — Schengen, USA, UK, Canada & Australia Visas" },
+      { name: "description", content: "Travel Links Solution — UK-based visa consultancy helping clients worldwide. Expert help with Schengen, USA B1/B2, UK, Canada, Australia, student, work & family visas across 25+ countries. 98% approval rate." },
+      { name: "keywords", content: "visa consultants, global visa consultancy, schengen visa consultants, usa b1 b2 visa help, uk visitor visa, canada study visa, australia tourist visa, work visa consultants, family visit visa, student visa consultants, worldwide visa services, travel visa agency, uk based visa consultants worldwide, Travel Links Solution, Travellinks" },
+      { property: "og:title", content: "Travel Links Solution | Global Visa Consultants — Schengen, USA, UK, Canada, Australia" },
+      { property: "og:description", content: "UK-based visa consultancy serving clients worldwide. Schengen, USA, UK, Canada, Australia, student, work & family visas across 25+ countries." },
       { property: "og:url", content: "https://travellinks.uk/" },
       { property: "og:image", content: "https://travellinks.uk/__l5e/assets-v1/86d58950-39c0-4ea4-b8dd-f0dbead6bc05/travel-links-logo.png" },
-      { name: "twitter:title", content: "UK Visa Consultant Northampton — Schengen, Visitor & Family Visas" },
-      { name: "twitter:description", content: "Schengen from UK, visitor, family, student & work visas across 25+ countries. 98% approval rate." },
+      { name: "twitter:title", content: "Travel Links Solution — Global Visa Consultants" },
+      { name: "twitter:description", content: "UK-based, serving worldwide. Schengen, USA, UK, Canada, Australia, student, work & family visas across 25+ countries." },
       { name: "twitter:image", content: "https://travellinks.uk/__l5e/assets-v1/86d58950-39c0-4ea4-b8dd-f0dbead6bc05/travel-links-logo.png" },
     ],
     links: [
