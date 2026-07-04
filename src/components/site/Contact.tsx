@@ -108,12 +108,12 @@ export function Contact() {
             : "Tell us about your goals and we'll get back within 24 hours with a tailored plan."}
         />
 
-        <div className="mt-14 grid lg:grid-cols-2 gap-8 lg:gap-12">
-          <div className="space-y-6">
-            <div className="overflow-hidden rounded-3xl shadow-card border border-border h-80">
+        <div className="mt-8 sm:mt-14 grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="overflow-hidden rounded-2xl sm:rounded-3xl shadow-card border border-border h-48 sm:h-80">
               <MapEmbed query={contact.map_query} />
             </div>
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
               {[
                 {
                   icon: MapPin,
