@@ -39,14 +39,14 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-[oklch(0.16_0.04_260)] text-white pt-16 pb-8 px-5 lg:px-8">
+    <footer className="bg-[oklch(0.16_0.04_260)] text-white pt-10 sm:pt-16 pb-6 sm:pb-8 px-4 sm:px-5 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-14 rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 lg:p-10 backdrop-blur-md flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between">
+        <div className="mb-8 sm:mb-14 rounded-2xl sm:rounded-3xl border border-white/10 bg-white/[0.04] p-4 sm:p-8 lg:p-10 backdrop-blur-md flex flex-col lg:flex-row gap-4 sm:gap-6 lg:items-center lg:justify-between">
           <div className="max-w-xl">
-            <h3 className="font-display text-2xl sm:text-3xl font-bold leading-tight">
+            <h3 className="font-display text-lg sm:text-2xl lg:text-3xl font-bold leading-tight">
               Visa news, tips & destination updates
             </h3>
-            <p className="mt-2 text-sm text-white/65">
+            <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/65">
               Join our newsletter for monthly insights — no spam, unsubscribe anytime.
             </p>
           </div>
@@ -60,12 +60,12 @@ export function Footer() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@email.com"
               aria-label="Email address"
-              className="flex-1 rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-brand-aqua/60"
+              className="min-w-0 flex-1 rounded-xl border border-white/15 bg-white/10 px-3 sm:px-4 py-2.5 sm:py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-brand-aqua/60"
             />
             <button
               type="submit"
               disabled={loading}
-              className="group inline-flex items-center gap-1.5 rounded-xl bg-gradient-brand px-5 py-3 text-sm font-bold text-white shadow-glow hover:-translate-y-0.5 transition disabled:opacity-60"
+              className="group inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-gradient-brand px-4 sm:px-5 py-2.5 sm:py-3 text-sm font-bold text-white shadow-glow hover:-translate-y-0.5 transition disabled:opacity-60"
             >
               {loading ? "…" : "Subscribe"}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -73,10 +73,10 @@ export function Footer() {
           </form>
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-4">
-          <div className="space-y-4">
+        <div className="grid gap-8 sm:gap-10 grid-cols-2 lg:grid-cols-4">
+          <div className="col-span-2 lg:col-span-1 space-y-3 sm:space-y-4">
             <Logo light />
-            <p className="text-sm text-white/70 max-w-xs">
+            <p className="text-xs sm:text-sm text-white/70 max-w-xs">
               UK-based visa consultancy guiding tourists, families and business travellers to destinations across the globe.
             </p>
             <div className="flex gap-2">
@@ -107,8 +107,8 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display text-sm font-semibold uppercase tracking-wider text-white">Quick Links</h4>
-            <ul className="mt-4 space-y-2.5 text-sm text-white/70">
+            <h4 className="font-display text-xs sm:text-sm font-semibold uppercase tracking-wider text-white">Quick Links</h4>
+            <ul className="mt-3 sm:mt-4 space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-white/70">
               {[
                 { label: "Home", href: "/" },
                 { label: "About", href: "/about" },
@@ -123,28 +123,28 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display text-sm font-semibold uppercase tracking-wider text-white">Visa Services</h4>
-            <ul className="mt-4 space-y-2.5 text-sm text-white/70">
+            <h4 className="font-display text-xs sm:text-sm font-semibold uppercase tracking-wider text-white">Visa Services</h4>
+            <ul className="mt-3 sm:mt-4 space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-white/70">
               {["Tourist Visa", "Business Visa", "Family Visa"].map((l) => (
                 <li key={l}><a href="/services" className="hover:text-white transition">{l}</a></li>
               ))}
             </ul>
           </div>
 
-          <div>
-            <h4 className="font-display text-sm font-semibold uppercase tracking-wider text-white">Contact</h4>
-            <ul className="mt-4 space-y-3 text-sm text-white/75">
-              <li className="flex items-start gap-2.5"><MapPin className="h-4 w-4 mt-0.5 text-brand-aqua shrink-0" /> {contact.address}</li>
-              <li className="flex items-start gap-2.5"><Mail className="h-4 w-4 mt-0.5 text-brand-aqua" /> {contact.email}</li>
-              <li className="flex items-start gap-2.5"><Phone className="h-4 w-4 mt-0.5 text-brand-aqua" /> {contact.phone_display}</li>
+          <div className="col-span-2 lg:col-span-1">
+            <h4 className="font-display text-xs sm:text-sm font-semibold uppercase tracking-wider text-white">Contact</h4>
+            <ul className="mt-3 sm:mt-4 space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-white/75">
+              <li className="flex items-start gap-2.5"><MapPin className="h-4 w-4 mt-0.5 text-brand-aqua shrink-0" /> <span className="min-w-0 break-words">{contact.address}</span></li>
+              <li className="flex items-start gap-2.5"><Mail className="h-4 w-4 mt-0.5 text-brand-aqua shrink-0" /> <span className="min-w-0 break-all">{contact.email}</span></li>
+              <li className="flex items-start gap-2.5"><Phone className="h-4 w-4 mt-0.5 text-brand-aqua shrink-0" /> <span className="min-w-0">{contact.phone_display}</span></li>
             </ul>
           </div>
         </div>
 
 
-        <div className="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row gap-3 justify-between items-center text-xs text-white/60">
+        <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/10 flex flex-col sm:flex-row gap-3 justify-between items-center text-[11px] sm:text-xs text-white/60 text-center sm:text-left">
           <p>© 2025 Travel Links Solution. All Rights Reserved.</p>
-          <div className="flex flex-wrap gap-5">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 sm:gap-5">
             <a href="/privacy" className="hover:text-white transition">Privacy Policy</a>
             <a href="/terms" className="hover:text-white transition">Terms</a>
             <a href="/cookies" className="hover:text-white transition">Cookies</a>
@@ -162,5 +162,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
+
   );
 }
