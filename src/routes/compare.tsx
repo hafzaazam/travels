@@ -7,6 +7,7 @@ import { Footer } from "@/components/site/Footer";
 import { BackToTop } from "@/components/site/BackToTop";
 import { Eyebrow } from "@/components/site/Eyebrow";
 import { COUNTRIES, type Country } from "@/data/countries";
+import { POPULAR_COMPARISONS, isSchengen } from "@/data/country-groups";
 import { suggestBestCountry } from "@/lib/compare-ai.functions";
 
 export const Route = createFileRoute("/compare")({
