@@ -10,7 +10,7 @@ import { useBookingSettings } from "@/hooks/useBookingSettings";
 import { BookingFormCompact } from "./BookingFormCompact";
 
 function MapEmbed({ query }: { query: string }) {
-  const [bbox, setBbox] = useState<string | null>(null);
+  const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -18,13 +18,9 @@ function MapEmbed({ query }: { query: string }) {
       `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`
     )
       .then((r) => r.json())
-      .then((data: Array<{ lat: string; lon: string; boundingbox: [string, string, string, string] }>) => {
+      .then((data: Array<{ lat: string; lon: string }>) => {
         if (cancelled || !data?.[0]) return;
-        const lat = parseFloat(data[0].lat);
-        const lon = parseFloat(data[0].lon);
-        // Tight ~500m box centered on the location, no marker
-        const d = 0.0035;
-        setBbox(`${lon - d},${lat - d},${lon + d},${lat + d}`);
+        setCoords({ lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) });
       })
       .catch(() => {});
     return () => {
@@ -32,14 +28,14 @@ function MapEmbed({ query }: { query: string }) {
     };
   }, [query]);
 
+  const src = coords
+    ? `https://maps.google.com/maps?ll=${coords.lat},${coords.lon}&z=16&t=m&output=embed`
+    : `https://maps.google.com/maps?ll=52.245,-0.895&z=15&t=m&output=embed`;
+
   return (
     <iframe
       title="Office location"
-      src={
-        bbox
-          ? `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik`
-          : `https://www.openstreetmap.org/export/embed.html?bbox=-0.905,52.235,-0.885,52.255&layer=mapnik`
-      }
+      src={src}
       className="h-full w-full"
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
