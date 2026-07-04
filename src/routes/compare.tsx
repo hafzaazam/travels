@@ -287,45 +287,60 @@ function ComparePage() {
                   .filter((c): c is Country => !!c);
                 if (presetCountries.length < 2) return null;
                 return (
-                  <div
+                  <article
                     key={preset.id}
-                    className="group rounded-3xl border border-border bg-white p-6 shadow-card hover:shadow-glow hover:-translate-y-0.5 transition-all"
+                    aria-labelledby={`preset-${preset.id}-title`}
+                    className="group rounded-3xl border border-border bg-white p-6 shadow-card hover:shadow-glow hover:-translate-y-0.5 transition-all focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2" aria-hidden="true">
                       {presetCountries.map((c) => (
                         <img
                           key={c.slug}
                           src={`https://flagcdn.com/w80/${c.code}.png`}
-                          alt={`${c.name} flag`}
+                          alt=""
                           className="h-8 w-12 object-cover rounded-md shadow-soft"
                           loading="lazy"
                           decoding="async"
                         />
                       ))}
                     </div>
-                    <h3 className="mt-4 font-display text-lg font-semibold">{preset.title}</h3>
+                    <h3
+                      id={`preset-${preset.id}-title`}
+                      className="mt-4 font-display text-lg font-semibold"
+                    >
+                      {preset.title}
+                    </h3>
                     <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
                       {preset.blurb}
                     </p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {presetCountries.map((c) => (
-                        <Link
-                          key={c.slug}
-                          to="/countries/$slug"
-                          params={{ slug: c.slug }}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-gradient-soft px-3 py-1 text-xs font-semibold text-foreground/80 hover:border-primary/40 hover:text-primary transition-colors"
-                        >
-                          {c.name} visa
-                          {isSchengen(c.slug) && (
-                            <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">
-                              Schengen
-                            </span>
-                          )}
-                        </Link>
-                      ))}
-                    </div>
+                    <ul className="mt-4 flex flex-wrap gap-2 list-none p-0">
+                      {presetCountries.map((c) => {
+                        const schengen = isSchengen(c.slug);
+                        return (
+                          <li key={c.slug}>
+                            <Link
+                              to="/countries/$slug"
+                              params={{ slug: c.slug }}
+                              aria-label={`${c.name} visa services${schengen ? " — Schengen destination" : ""}`}
+                              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-gradient-soft px-3 py-1 text-xs font-semibold text-foreground/80 hover:border-primary/40 hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-primary"
+                            >
+                              {c.name} visa
+                              {schengen && (
+                                <span
+                                  aria-hidden="true"
+                                  className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary"
+                                >
+                                  Schengen
+                                </span>
+                              )}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
                     <button
                       type="button"
+                      aria-label={`Load ${preset.title} into the comparison tool above`}
                       onClick={() => {
                         setVisaFilter("all");
                         setSelected(preset.slugs.slice(0, MAX_SLOTS));
@@ -333,12 +348,12 @@ function ComparePage() {
                           window.scrollTo({ top: 0, behavior: "smooth" });
                         }
                       }}
-                      className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
+                      className="mt-5 inline-flex items-center gap-1.5 rounded-md text-sm font-semibold text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     >
                       Load into compare tool
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                     </button>
-                  </div>
+                  </article>
                 );
               })}
             </div>
