@@ -33,6 +33,45 @@ export const Route = createFileRoute("/countries/")({
       { name: "twitter:description", content: "Browse visa services for 25+ destinations across Europe, Americas, Asia and beyond." },
     ],
     links: [{ rel: "canonical", href: "https://travellinks.uk/countries" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "CollectionPage",
+              "@id": "https://travellinks.uk/countries#webpage",
+              url: "https://travellinks.uk/countries",
+              name: "Visa Services by Country — Travel Links Solution",
+              description:
+                "Browse visa services for 25+ destinations. UK-based consultants handling tourist, family and business visa applications end-to-end.",
+              isPartOf: { "@id": "https://travellinks.uk/#website" },
+              about: { "@id": "https://travellinks.uk/#organization" },
+              inLanguage: "en-GB",
+            },
+            {
+              "@type": "ItemList",
+              name: "Visa Destinations",
+              numberOfItems: COUNTRIES.length,
+              itemListElement: COUNTRIES.map((c, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: `${c.name} Visa`,
+                url: `https://travellinks.uk/countries/${c.slug}`,
+              })),
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://travellinks.uk/" },
+                { "@type": "ListItem", position: 2, name: "Countries", item: "https://travellinks.uk/countries" },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
   component: CountriesIndex,
 });
