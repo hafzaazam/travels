@@ -10,7 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import logoAsset from "@/assets/travel-links-logo.png.asset.json";
+
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SplashScreen } from "@/components/site/SplashScreen";
 import { ApplyDialog } from "@/components/site/ApplyDialog";
@@ -96,15 +96,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Travel Links Solution — UK-based visa consultancy helping clients worldwide. Expert help with Schengen, USA B1/B2, UK, Canada, Australia, student, work & family visas across 25+ countries. 98% approval rate." },
       { property: "og:description", content: "Travel Links Solution — UK-based visa consultancy helping clients worldwide. Expert help with Schengen, USA B1/B2, UK, Canada, Australia, student, work & family visas across 25+ countries. 98% approval rate." },
       { name: "twitter:description", content: "Travel Links Solution — UK-based visa consultancy helping clients worldwide. Expert help with Schengen, USA B1/B2, UK, Canada, Australia, student, work & family visas across 25+ countries. 98% approval rate." },
-      { property: "og:image", content: "https://travellinks.uk/__l5e/assets-v1/9ce134ea-24e9-425c-8bbd-5164ddff1e37/og-image.jpg" },
-      { name: "twitter:image", content: "https://travellinks.uk/__l5e/assets-v1/9ce134ea-24e9-425c-8bbd-5164ddff1e37/og-image.jpg" },
+      { property: "og:image", content: "https://travellinks.uk/assets/media/og-image.jpg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Travel Links Solution — UK Visa Consultancy" },
+      { name: "twitter:image", content: "https://travellinks.uk/assets/media/og-image.jpg" },
+      { name: "twitter:image:alt", content: "Travel Links Solution — UK Visa Consultancy" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "icon", type: "image/png", sizes: "any", href: "/favicon.png" },
+      { rel: "icon", type: "image/png", sizes: "512x512", href: "/favicon.png" },
+      { rel: "icon", type: "image/png", sizes: "192x192", href: "/favicon.png" },
+      { rel: "icon", type: "image/png", sizes: "96x96", href: "/favicon.png" },
+      { rel: "icon", type: "image/png", sizes: "48x48", href: "/favicon.png" },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon.png" },
       { rel: "shortcut icon", href: "/favicon.ico" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-      { rel: "icon", type: "image/png", sizes: "192x192", href: logoAsset.url },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+      { rel: "mask-icon", href: "/favicon.png", color: "#2157f3" },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -126,8 +135,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               name: "Travel Links Solution",
               alternateName: ["Travel Links", "Travellinks", "Travellinks Solution", "Travel Links UK", "Travellinks UK", "Travel Links Consultancy", "Travel Links UK Visa"],
               url: "https://travellinks.uk",
-              logo: "https://travellinks.uk/__l5e/assets-v1/7af30677-21db-4df6-b49b-b973df323810/travel-links-logo.png",
-              image: "https://travellinks.uk/__l5e/assets-v1/7af30677-21db-4df6-b49b-b973df323810/travel-links-logo.png",
+              logo: "https://travellinks.uk/assets/media/travel-links-logo.png",
+              image: "https://travellinks.uk/assets/media/og-image.jpg",
               email: "contact@travellinks.uk",
               telephone: "+44-787-946-5341",
               priceRange: "££",
