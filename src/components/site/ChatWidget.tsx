@@ -297,7 +297,28 @@ export function ChatWidget() {
                         <p className="whitespace-pre-wrap">{m.content}</p>
                       ) : (
                         <div className="prose prose-sm max-w-none text-foreground [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_p]:my-1 [&_ul]:my-1 [&_ul]:pl-4 [&_strong]:text-foreground">
-                          <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
+                          <ReactMarkdown
+                            components={{
+                              a: ({ href, children, ...props }) => {
+                                const url = href ?? "";
+                                const isInternal = url.startsWith("/") && !url.startsWith("//");
+                                if (isInternal) {
+                                  return (
+                                    <Link to={url} onClick={() => setOpen(false)} {...(props as Record<string, unknown>)}>
+                                      {children}
+                                    </Link>
+                                  );
+                                }
+                                return (
+                                  <a href={url} target="_blank" rel="noopener noreferrer" {...props}>
+                                    {children}
+                                  </a>
+                                );
+                              },
+                            }}
+                          >
+                            {m.content || "…"}
+                          </ReactMarkdown>
                         </div>
                       )}
                     </div>
