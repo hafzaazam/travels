@@ -166,13 +166,13 @@ export function Contact() {
                   href={href}
                   target={external ? "_blank" : undefined}
                   rel={external ? "noopener noreferrer" : undefined}
-                  className="group rounded-2xl bg-white border border-border p-5 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-glow"
+                  className="group rounded-xl sm:rounded-2xl bg-white border border-border p-3 sm:p-5 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-glow"
                 >
-                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-brand text-white transition-transform group-hover:scale-110">
-                    <Icon className="h-4.5 w-4.5" />
+                  <div className="grid h-8 w-8 sm:h-10 sm:w-10 place-items-center rounded-lg sm:rounded-xl bg-gradient-brand text-white transition-transform group-hover:scale-110">
+                    <Icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                   </div>
-                  <div className="mt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
-                  <div className="text-sm font-medium break-words group-hover:text-primary transition-colors">{value}</div>
+                  <div className="mt-2 sm:mt-3 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
+                  <div className="text-xs sm:text-sm font-medium break-words group-hover:text-primary transition-colors">{value}</div>
                 </a>
               ))}
             </div>
