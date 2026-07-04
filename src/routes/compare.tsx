@@ -7,6 +7,7 @@ import { Footer } from "@/components/site/Footer";
 import { BackToTop } from "@/components/site/BackToTop";
 import { Eyebrow } from "@/components/site/Eyebrow";
 import { COUNTRIES, type Country } from "@/data/countries";
+import { POPULAR_COMPARISONS, isSchengen } from "@/data/country-groups";
 import { suggestBestCountry } from "@/lib/compare-ai.functions";
 
 export const Route = createFileRoute("/compare")({
@@ -258,6 +259,91 @@ function ComparePage() {
           </div>
         </section>
 
+        {/* Popular comparisons — internal links to the most relevant country pages */}
+        <section className="py-14 px-5 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex items-end justify-between gap-4 flex-wrap">
+              <div>
+                <Eyebrow label="Popular comparisons" />
+                <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold">
+                  Head-to-head visa comparisons
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                  The questions we get asked most. Open a country page for full details, or load a preset into the table above.
+                </p>
+              </div>
+              <Link
+                to="/countries"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
+              >
+                Browse all countries <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {POPULAR_COMPARISONS.map((preset) => {
+                const presetCountries = preset.slugs
+                  .map((s) => COUNTRIES.find((c) => c.slug === s))
+                  .filter((c): c is Country => !!c);
+                if (presetCountries.length < 2) return null;
+                return (
+                  <div
+                    key={preset.id}
+                    className="group rounded-3xl border border-border bg-white p-6 shadow-card hover:shadow-glow hover:-translate-y-0.5 transition-all"
+                  >
+                    <div className="flex items-center gap-2">
+                      {presetCountries.map((c) => (
+                        <img
+                          key={c.slug}
+                          src={`https://flagcdn.com/w80/${c.code}.png`}
+                          alt={`${c.name} flag`}
+                          className="h-8 w-12 object-cover rounded-md shadow-soft"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ))}
+                    </div>
+                    <h3 className="mt-4 font-display text-lg font-semibold">{preset.title}</h3>
+                    <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                      {preset.blurb}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {presetCountries.map((c) => (
+                        <Link
+                          key={c.slug}
+                          to="/countries/$slug"
+                          params={{ slug: c.slug }}
+                          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-gradient-soft px-3 py-1 text-xs font-semibold text-foreground/80 hover:border-primary/40 hover:text-primary transition-colors"
+                        >
+                          {c.name} visa
+                          {isSchengen(c.slug) && (
+                            <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">
+                              Schengen
+                            </span>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setVisaFilter("all");
+                        setSelected(preset.slugs.slice(0, MAX_SLOTS));
+                        if (typeof window !== "undefined") {
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }
+                      }}
+                      className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
+                    >
+                      Load into compare tool
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
 
         {/* Comparison table */}
         <section className="py-16 px-5 lg:px-8">
