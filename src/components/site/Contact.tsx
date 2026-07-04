@@ -10,10 +10,36 @@ import { useBookingSettings } from "@/hooks/useBookingSettings";
 import { BookingFormCompact } from "./BookingFormCompact";
 
 function MapEmbed({ query }: { query: string }) {
+  const [bbox, setBbox] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`
+    )
+      .then((r) => r.json())
+      .then((data: Array<{ lat: string; lon: string; boundingbox: [string, string, string, string] }>) => {
+        if (cancelled || !data?.[0]) return;
+        const lat = parseFloat(data[0].lat);
+        const lon = parseFloat(data[0].lon);
+        // Tight ~500m box centered on the location, no marker
+        const d = 0.0035;
+        setBbox(`${lon - d},${lat - d},${lon + d},${lat + d}`);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [query]);
+
   return (
     <iframe
       title="Office location"
-      src={`https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`}
+      src={
+        bbox
+          ? `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik`
+          : `https://www.openstreetmap.org/export/embed.html?bbox=-0.905,52.235,-0.885,52.255&layer=mapnik`
+      }
       className="h-full w-full"
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
