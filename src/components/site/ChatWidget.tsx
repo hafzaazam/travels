@@ -1,6 +1,7 @@
 import { MessageCircle, X, Send, Loader2, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import ReactMarkdown from "react-markdown";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { LINA_PERSONA, getToneDirective, renderSiteLinksForPrompt } from "@/lib/lina-persona";
 import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
