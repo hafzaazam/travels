@@ -29,18 +29,45 @@ export const Route = createFileRoute("/countries/$slug")({
   },
   head: ({ loaderData }) => {
     const c = loaderData?.country;
+    const visaTypes = c ? c.visas.map((v) => v.type).join(", ") : "";
+    const primaryVisa = c?.visas[0]?.type ?? "Visa";
     const title = c
-      ? `${c.name} Visa from UK — Travel Links Solution`
+      ? `${c.name} Visa from UK — ${primaryVisa}, Documents & Appointments | Travel Links Solution`
       : "Country Visa — Travel Links Solution";
     const description = c
-      ? `Apply for a ${c.name} visa with Travel Links Solution. ${c.tagline}. End-to-end documentation, submission and interview prep from our UK consultants.`
+      ? `${c.name} visa from the UK made simple. Travel Links Solution helps with ${visaTypes} — documents, ${c.name === "USA" ? "DS-160" : c.name === "Canada" ? "IRCC forms" : "appointment booking"}, and interview prep. Processing ${c.processingTime}. Free consultation.`
       : "Visa services for 25+ destinations.";
+    const keywords = c
+      ? [
+          `${c.name} visa`,
+          `${c.name} visa from UK`,
+          `${c.name} visa consultants`,
+          `${c.name} visa consultants UK`,
+          `${c.name} visa application`,
+          `${c.name} visa requirements`,
+          `${c.name} visa processing time`,
+          `${c.name} visa fees`,
+          `${c.name} visa help`,
+          `${c.name} visa agency`,
+          `apply for ${c.name} visa`,
+          `how to apply for a ${c.name} visa from the UK`,
+          `${c.name} visa Northampton`,
+          `${c.name} embassy appointment UK`,
+          ...c.visas.map((v) => `${c.name} ${v.type.toLowerCase()}`),
+          ...c.visas.map((v) => `${c.name} ${v.type.toLowerCase()} consultants`),
+          "Travel Links Solution",
+          "Travellinks",
+          "UK visa consultants",
+          "worldwide visa services",
+        ].join(", ")
+      : "";
     const ogImage = c ? `https://flagcdn.com/w1280/${c.code}.png` : undefined;
     const canonical = c ? `https://travellinks.uk/countries/${c.slug}` : undefined;
     return {
       meta: [
         { title },
         { name: "description", content: description },
+        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
