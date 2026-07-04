@@ -96,7 +96,7 @@ export function Contact() {
   const lockSubmit = submitted || loading;
 
   return (
-    <section id="contact" className="py-24 px-5 lg:px-8">
+    <section id="contact" className="py-14 sm:py-24 px-4 sm:px-5 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           eyebrow={bookingActive ? "Book a Consultation" : "Get in Touch"}
