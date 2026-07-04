@@ -96,7 +96,7 @@ export function Contact() {
   const lockSubmit = submitted || loading;
 
   return (
-    <section id="contact" className="py-24 px-5 lg:px-8">
+    <section id="contact" className="py-14 sm:py-24 px-4 sm:px-5 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           eyebrow={bookingActive ? "Book a Consultation" : "Get in Touch"}
@@ -108,12 +108,12 @@ export function Contact() {
             : "Tell us about your goals and we'll get back within 24 hours with a tailored plan."}
         />
 
-        <div className="mt-14 grid lg:grid-cols-2 gap-8 lg:gap-12">
-          <div className="space-y-6">
-            <div className="overflow-hidden rounded-3xl shadow-card border border-border h-80">
+        <div className="mt-8 sm:mt-14 grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="overflow-hidden rounded-2xl sm:rounded-3xl shadow-card border border-border h-48 sm:h-80">
               <MapEmbed query={contact.map_query} />
             </div>
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
               {[
                 {
                   icon: MapPin,
@@ -166,13 +166,13 @@ export function Contact() {
                   href={href}
                   target={external ? "_blank" : undefined}
                   rel={external ? "noopener noreferrer" : undefined}
-                  className="group rounded-2xl bg-white border border-border p-5 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-glow"
+                  className="group rounded-xl sm:rounded-2xl bg-white border border-border p-3 sm:p-5 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-glow"
                 >
-                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-brand text-white transition-transform group-hover:scale-110">
-                    <Icon className="h-4.5 w-4.5" />
+                  <div className="grid h-8 w-8 sm:h-10 sm:w-10 place-items-center rounded-lg sm:rounded-xl bg-gradient-brand text-white transition-transform group-hover:scale-110">
+                    <Icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                   </div>
-                  <div className="mt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
-                  <div className="text-sm font-medium break-words group-hover:text-primary transition-colors">{value}</div>
+                  <div className="mt-2 sm:mt-3 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
+                  <div className="text-xs sm:text-sm font-medium break-words group-hover:text-primary transition-colors">{value}</div>
                 </a>
               ))}
             </div>
