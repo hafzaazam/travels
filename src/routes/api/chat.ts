@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { z } from "zod";
 import { createAiGatewayProvider, getConfiguredModelProviders } from "@/lib/ai-gateway.server";
-import { LINA_PERSONA, getToneDirective } from "@/lib/lina-persona";
+import { LINA_PERSONA, getToneDirective, renderSiteLinksForPrompt } from "@/lib/lina-persona";
 
 const MAX_MESSAGES = 40;
 const MAX_TEXT_CHARS = 4000;
