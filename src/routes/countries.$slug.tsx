@@ -8,6 +8,7 @@ import { CurrencyRate } from "@/components/site/CurrencyRate";
 import { Eyebrow } from "@/components/site/Eyebrow";
 import { BlurImage } from "@/components/site/BlurImage";
 import { COUNTRIES, getCountryBySlug, type Country } from "@/data/countries";
+import { isSchengen } from "@/data/country-groups";
 import travelSuitcase from "@/assets/travel-suitcase.png.asset.json";
 
 function countryFaqs(c: Country) {
