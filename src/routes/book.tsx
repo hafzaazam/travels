@@ -30,6 +30,46 @@ export const Route = createFileRoute("/book")({
       { name: "twitter:description", content: "Reserve your consultation slot with Travel Links Solution's OISC-partnered advisors." },
     ],
     links: [{ rel: "canonical", href: "https://travellinks.uk/book" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://travellinks.uk/book#webpage",
+              url: "https://travellinks.uk/book",
+              name: "Book a Consultation — Travel Links Solution",
+              description: "Book a UK visa consultation with Travel Links Solution.",
+              isPartOf: { "@id": "https://travellinks.uk/#website" },
+              about: { "@id": "https://travellinks.uk/#organization" },
+              inLanguage: "en-GB",
+            },
+            {
+              "@type": "ReserveAction",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: "https://travellinks.uk/book",
+                actionPlatform: [
+                  "https://schema.org/DesktopWebPlatform",
+                  "https://schema.org/MobileWebPlatform",
+                ],
+              },
+              result: { "@type": "Reservation", name: "Visa Consultation" },
+              provider: { "@id": "https://travellinks.uk/#organization" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://travellinks.uk/" },
+                { "@type": "ListItem", position: 2, name: "Book a Consultation", item: "https://travellinks.uk/book" },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
   component: BookPage,
 });

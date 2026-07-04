@@ -45,6 +45,33 @@ export const Route = createFileRoute("/blog/")({
       { name: "twitter:description", content: "Visa guides, embassy updates, and travel inspiration from the UK's trusted visa consultancy." },
     ],
     links: [{ rel: "canonical", href: "https://travellinks.uk/blog" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Blog",
+              "@id": "https://travellinks.uk/blog#blog",
+              url: "https://travellinks.uk/blog",
+              name: "The Journal — Travel Links Solution",
+              description:
+                "Perspectives from the UK's trusted visa consultancy — guides, embassy updates, and destination inspiration.",
+              inLanguage: "en-GB",
+              publisher: { "@id": "https://travellinks.uk/#organization" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://travellinks.uk/" },
+                { "@type": "ListItem", position: 2, name: "Blog", item: "https://travellinks.uk/blog" },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
   component: BlogIndex,
 });
