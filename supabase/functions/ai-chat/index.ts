@@ -1,7 +1,9 @@
 // Supabase Edge Function: ai-chat
-// Proxies chat requests to Lovable AI Gateway using LOVABLE_API_KEY.
-// Auto-deployed by Lovable Cloud. Callable from the static Hostinger site
-// and from the Lovable preview alike.
+// Standalone chat proxy. Works on ANY Supabase project.
+// Priority: GEMINI_API_KEY (Google AI Studio) -> OPENAI_API_KEY -> LOVABLE_API_KEY.
+// Deploy to your own project:
+//   supabase functions deploy ai-chat --project-ref <your-ref> --no-verify-jwt
+//   supabase secrets set GEMINI_API_KEY=... --project-ref <your-ref>
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -18,48 +20,90 @@ function json(body: unknown, status = 200) {
   });
 }
 
-Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+async function callGemini(messages: ChatMessage[], apiKey: string, model: string) {
+  // Convert OpenAI-style messages to Gemini format
+  const system = messages.filter((m) => m.role === "system").map((m) => m.content).join("\n\n");
+  const contents = messages
+    .filter((m) => m.role !== "system")
+    .map((m) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    }));
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents,
+      ...(system ? { systemInstruction: { parts: [{ text: system }] } } : {}),
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Gemini error ${res.status}: ${text}`);
   }
+  const data = await res.json();
+  const text = data?.candidates?.[0]?.content?.parts?.map((p: { text?: string }) => p.text ?? "").join("") ?? "";
+  return text;
+}
+
+async function callOpenAI(messages: ChatMessage[], apiKey: string, model: string) {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+    body: JSON.stringify({ model, messages, stream: false }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`OpenAI error ${res.status}: ${text}`);
+  }
+  const data = await res.json();
+  return data?.choices?.[0]?.message?.content ?? "";
+}
+
+async function callLovable(messages: ChatMessage[], apiKey: string, model: string) {
+  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Lovable-API-Key": apiKey },
+    body: JSON.stringify({ model, messages, stream: false }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Lovable gateway error ${res.status}: ${text}`);
+  }
+  const data = await res.json();
+  return data?.choices?.[0]?.message?.content ?? "";
+}
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      return json({ error: "LOVABLE_API_KEY not configured" }, 500);
-    }
-
-    const {
-      messages,
-      model = "google/gemini-3-flash-preview",
-    }: { messages: ChatMessage[]; model?: string } = await req.json();
-
+    const { messages, model }: { messages: ChatMessage[]; model?: string } = await req.json();
     if (!Array.isArray(messages) || messages.length === 0) {
       return json({ error: "messages[] required" }, 400);
     }
 
-    const upstream = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Lovable-API-Key": LOVABLE_API_KEY,
-      },
-      body: JSON.stringify({ model, messages, stream: false }),
-    });
+    const GEMINI = Deno.env.get("GEMINI_API_KEY");
+    const OPENAI = Deno.env.get("OPENAI_API_KEY");
+    const LOVABLE = Deno.env.get("LOVABLE_API_KEY");
 
-    if (!upstream.ok) {
-      const text = await upstream.text();
-      if (upstream.status === 429) {
-        return json({ error: "Rate limit — please try again in a moment." }, 429);
-      }
-      if (upstream.status === 402) {
-        return json({ error: "AI credits exhausted. Please top up your Lovable workspace." }, 402);
-      }
-      return json({ error: `AI gateway error: ${text}` }, upstream.status);
+    let text = "";
+    if (GEMINI) {
+      const m = model || Deno.env.get("GEMINI_MODEL_ID") || "gemini-2.0-flash";
+      text = await callGemini(messages, GEMINI, m);
+    } else if (OPENAI) {
+      const m = model || Deno.env.get("OPENAI_MODEL_ID") || "gpt-4o-mini";
+      text = await callOpenAI(messages, OPENAI, m);
+    } else if (LOVABLE) {
+      const m = model || "google/gemini-2.5-flash";
+      text = await callLovable(messages, LOVABLE, m);
+    } else {
+      return json({ error: "No AI key configured (GEMINI_API_KEY / OPENAI_API_KEY / LOVABLE_API_KEY)" }, 500);
     }
 
-    const data = await upstream.json();
-    const text = data?.choices?.[0]?.message?.content ?? "";
     return json({ text });
   } catch (err) {
     console.error("ai-chat error", err);
