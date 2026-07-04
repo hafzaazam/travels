@@ -447,27 +447,80 @@ function CountryPage() {
               </Link>
             </div>
 
-            <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {otherCountries.map((c) => (
+            <div className="mt-4 max-w-2xl text-sm text-muted-foreground">
+              {currentIsSchengen
+                ? `${country.name} is part of the Schengen area — a single visa covers 29 countries. Here are other Schengen destinations we handle, plus non-Schengen alternatives.`
+                : `${country.name} is outside the Schengen area and needs its own visa. Explore other non-Schengen destinations we handle, or pair your trip with a Schengen visa.`}
+            </div>
+
+            <div className="mt-10">
+              <div className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
+                {sameGroupLabel}
+              </div>
+              <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                {sameGroup.map((c) => (
+                  <Link
+                    key={c.slug}
+                    to="/countries/$slug"
+                    params={{ slug: c.slug }}
+                    aria-label={`${c.name} visa services${isSchengen(c.slug) ? " (Schengen)" : ""}`}
+                    className="group overflow-hidden rounded-2xl bg-white border border-border shadow-card hover:shadow-glow hover:-translate-y-1 transition-all"
+                  >
+                    <div className="relative h-20 overflow-hidden">
+                      <BlurImage
+                        src={`https://flagcdn.com/w640/${c.code}.png`}
+                        placeholder={`https://flagcdn.com/w20/${c.code}.png`}
+                        alt={`${c.name} flag`}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                    </div>
+                    <div className="p-3">
+                      <div className="font-display text-sm font-semibold">{c.name}</div>
+                      <div className="text-[11px] text-muted-foreground mt-0.5">
+                        {isSchengen(c.slug) ? "Schengen" : "Non-Schengen"}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-12 rounded-3xl border border-border bg-gradient-soft p-6 sm:p-8">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
+                    {otherGroupLabel}
+                  </div>
+                  <p className="mt-2 max-w-2xl text-sm text-foreground/80 leading-relaxed">
+                    {otherGroupBlurb}
+                  </p>
+                </div>
                 <Link
-                  key={c.slug}
-                  to="/countries/$slug"
-                  params={{ slug: c.slug }}
-                  className="group overflow-hidden rounded-2xl bg-white border border-border shadow-card hover:shadow-glow hover:-translate-y-1 transition-all"
+                  to="/compare"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary whitespace-nowrap"
                 >
-                  <div className="relative h-20 overflow-hidden">
-                    <BlurImage
-                      src={`https://flagcdn.com/w640/${c.code}.png`}
-                      placeholder={`https://flagcdn.com/w20/${c.code}.png`}
-                      alt={`${c.name} flag`}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                  </div>
-                  <div className="p-3">
-                    <div className="font-display text-sm font-semibold">{c.name}</div>
-                  </div>
+                  Compare side-by-side <ArrowRight className="h-4 w-4" />
                 </Link>
-              ))}
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {otherGroup.map((c) => (
+                  <Link
+                    key={c.slug}
+                    to="/countries/$slug"
+                    params={{ slug: c.slug }}
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-1.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:-translate-y-0.5 transition-all"
+                  >
+                    <img
+                      src={`https://flagcdn.com/w40/${c.code}.png`}
+                      alt=""
+                      className="h-4 w-6 object-cover rounded-sm"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {c.name} visa
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </section>
