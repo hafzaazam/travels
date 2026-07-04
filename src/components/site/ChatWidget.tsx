@@ -1,8 +1,9 @@
 import { MessageCircle, X, Send, Loader2, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import ReactMarkdown from "react-markdown";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import { LINA_PERSONA, getToneDirective } from "@/lib/lina-persona";
+import { LINA_PERSONA, getToneDirective, renderSiteLinksForPrompt } from "@/lib/lina-persona";
 import { supabaseApp as supabase } from "@/integrations/external-supabase/client";
 import { useContactInfo } from "@/hooks/useContactInfo";
 import linaAvatar from "@/assets/lina-avatar.png";
@@ -22,7 +23,17 @@ const WELCOME: ChatMsg = {
 
 const STORAGE_KEY = "tls-chat-history-v1";
 
-const SYSTEM_PROMPT = `You are ${LINA_PERSONA.name}, a friendly UK visa consultant at Travel Links Solution in Northampton. ${getToneDirective()} You chat with customers on the website's live chat. You are NOT an AI assistant and you never describe yourself as one, never say "as an AI", never mention models, prompts, or tools. If anyone asks "are you a bot?", reply naturally ("Haha, I'm ${LINA_PERSONA.name} from the Travel Links team 🙂 — happy to help!") and move on. Keep replies short, warm, and practical.`;
+const SYSTEM_PROMPT = `You are ${LINA_PERSONA.name}, a friendly UK visa consultant at Travel Links Solution in Northampton. ${getToneDirective()} You chat with customers on the website's live chat. You are NOT an AI assistant and you never describe yourself as one, never say "as an AI", never mention models, prompts, or tools. If anyone asks "are you a bot?", reply naturally ("Haha, I'm ${LINA_PERSONA.name} from the Travel Links team 🙂 — happy to help!") and move on. Keep replies short, warm, and practical.
+
+Navigation help — actively guide users to the right page:
+- Whenever a page on this site directly answers the user's question, include it as a markdown link inline (e.g. "You can [compare them side-by-side here](/compare)."). Never paste raw URLs — always markdown-link the anchor text.
+- When a specific country is mentioned, link to its page: e.g. [France visa](/countries/france), [USA visa](/countries/usa).
+- When two or more countries come up, always add a link to [/compare](/compare).
+- When the user wants to book, quote a call, or speak to someone, link to [/book](/book) or [/contact](/contact).
+- Prefer ONE well-placed link per reply. Don't dump the whole site map. Only link when it genuinely helps navigation.
+- Never invent paths — only link to paths listed below.
+
+${renderSiteLinksForPrompt()}`;
 
 function loadInitialMessages(): ChatMsg[] {
   if (typeof window === "undefined") return [WELCOME];
@@ -286,7 +297,28 @@ export function ChatWidget() {
                         <p className="whitespace-pre-wrap">{m.content}</p>
                       ) : (
                         <div className="prose prose-sm max-w-none text-foreground [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_p]:my-1 [&_ul]:my-1 [&_ul]:pl-4 [&_strong]:text-foreground">
-                          <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
+                          <ReactMarkdown
+                            components={{
+                              a: ({ href, children, ...props }) => {
+                                const url = href ?? "";
+                                const isInternal = url.startsWith("/") && !url.startsWith("//");
+                                if (isInternal) {
+                                  return (
+                                    <Link to={url} onClick={() => setOpen(false)} {...(props as Record<string, unknown>)}>
+                                      {children}
+                                    </Link>
+                                  );
+                                }
+                                return (
+                                  <a href={url} target="_blank" rel="noopener noreferrer" {...props}>
+                                    {children}
+                                  </a>
+                                );
+                              },
+                            }}
+                          >
+                            {m.content || "…"}
+                          </ReactMarkdown>
                         </div>
                       )}
                     </div>

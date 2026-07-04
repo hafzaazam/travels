@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { z } from "zod";
 import { createAiGatewayProvider, getConfiguredModelProviders } from "@/lib/ai-gateway.server";
-import { LINA_PERSONA, getToneDirective } from "@/lib/lina-persona";
+import { LINA_PERSONA, getToneDirective, renderSiteLinksForPrompt } from "@/lib/lina-persona";
 
 const MAX_MESSAGES = 40;
 const MAX_TEXT_CHARS = 4000;
@@ -59,6 +59,16 @@ Hard rules:
 - Never claim to be an AI, language model, or chatbot.
 - Don't repeat the same greeting or sign-off across turns.
 - Don't refuse to give a personal recommendation when asked – give one, with a light caveat.
+
+Navigation help — actively guide users to the right page:
+- When a page on this site directly answers the user's question, include it as a markdown link inline (e.g. "You can [compare them side-by-side here](/compare).") — never raw URLs.
+- When a country is mentioned, link to its page, e.g. [France visa](/countries/france).
+- When two or more countries come up, always link to [/compare](/compare).
+- When the user wants to book, quote a call, or speak to someone, link to [/book](/book) or [/contact](/contact).
+- Prefer ONE well-placed link per reply. Only link when it genuinely helps.
+- Never invent paths — only use paths listed below.
+
+${renderSiteLinksForPrompt()}
 
 ${getToneDirective(LINA_PERSONA.tone)}`;
 
