@@ -44,6 +44,63 @@ export const Route = createFileRoute("/")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          "@id": "https://travellinks.uk/#organization",
+          name: "Travel Links Solution",
+          alternateName: ["Travellinks", "Travel Links"],
+          url: "https://travellinks.uk/",
+          logo: "https://travellinks.uk/__l5e/assets-v1/86d58950-39c0-4ea4-b8dd-f0dbead6bc05/travel-links-logo.png",
+          image: "https://travellinks.uk/__l5e/assets-v1/86d58950-39c0-4ea4-b8dd-f0dbead6bc05/travel-links-logo.png",
+          description:
+            "UK-based visa consultancy helping clients worldwide with Schengen, USA, UK, Canada, Australia, student, work and family visas across 25+ countries.",
+          priceRange: "££",
+          areaServed: { "@type": "Place", name: "Worldwide" },
+          address: {
+            "@type": "PostalAddress",
+            addressCountry: "GB",
+            addressLocality: "Northampton",
+          },
+          serviceType: [
+            "Visa Consultancy",
+            "Schengen Visa Assistance",
+            "USA B1/B2 Visa Assistance",
+            "UK Visitor Visa Assistance",
+            "Canada Visa Assistance",
+            "Australia Visa Assistance",
+            "Student Visa Consultancy",
+            "Work Visa Consultancy",
+            "Family Visit Visa Consultancy",
+          ],
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "Visa Destinations Served",
+            itemListElement: [
+              "Germany", "France", "Netherlands", "Switzerland", "Iceland", "Sweden",
+              "Portugal", "Greece", "Austria", "Italy", "United States", "Canada",
+              "Australia", "New Zealand", "Ireland", "Japan", "South Africa",
+              "Turkey", "Singapore", "Malaysia", "Thailand", "Morocco",
+            ].map((c) => ({
+              "@type": "Offer",
+              itemOffered: { "@type": "Service", name: `${c} Visa Consultancy`, areaServed: { "@type": "Country", name: c } },
+            })),
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          url: "https://travellinks.uk/",
+          name: "Travel Links Solution",
+          publisher: { "@id": "https://travellinks.uk/#organization" },
+          inLanguage: "en-GB",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
           "@type": "FAQPage",
           mainEntity: FAQS.map((f) => ({
             "@type": "Question",
